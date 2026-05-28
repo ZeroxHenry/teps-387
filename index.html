@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
+<meta name="theme-color" content="#b45309" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="TEPS 387" />
+<link rel="manifest" href="manifest.json" />
+<link rel="apple-touch-icon" href="icons/icon-192.png" />
+<link rel="icon" type="image/png" href="icons/favicon.png" />
+<title>TEPS 387 단어장</title>
+<style>
+  /* ─── HARNESS: Tokens ─────────────────────────────────────────── */
+  :root {
+    --amber-50:#fef9f3; --amber-100:#fef3c7; --amber-200:#fde68a;
+    --amber-500:#f59e0b; --amber-600:#d97706; --amber-700:#b45309; --amber-900:#78350f;
+    --ink:#1c1b18; --ink-2:#3f3a30; --muted:#8a847a;
+    --line:#e9e2d6; --card:#ffffff; --bg:#fef9f3;
+    --ok:#15803d; --bad:#b91c1c; --info:#0e7490;
+    --shadow:0 1px 2px rgba(0,0,0,0.04), 0 8px 24px rgba(120,53,15,0.06);
+    --radius:14px; --radius-sm:10px;
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root.auto-dark {
+      --ink:#f5efe2; --ink-2:#cdc6b7; --muted:#9b9385;
+      --line:#3a342a; --card:#23201a; --bg:#1a1814; --amber-50:#23201a; --amber-100:#3a2f1a;
+      --shadow:0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.4);
+    }
+  }
+
+  /* ─── HARNESS: Reset ─────────────────────────────────────────── */
+  *,*::before,*::after { box-sizing:border-box; }
+  html,body { margin:0; padding:0; background:var(--bg); color:var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased; line-height:1.55; }
+  button { font: inherit; color:inherit; background:none; border:none; cursor:pointer; padding:0; }
+  input { font: inherit; }
+  ::-webkit-scrollbar { width:0; height:0; }
+
+  /* ─── HARNESS: Layout ─────────────────────────────────────────── */
+  .app { max-width: 720px; margin: 0 auto; min-height: 100dvh; display:flex; flex-direction:column; }
+  header.top {
+    position: sticky; top: 0; z-index: 10;
+    background: linear-gradient(180deg, var(--amber-700), var(--amber-600));
+    color: white; padding: env(safe-area-inset-top, 0px) 16px 12px;
+    box-shadow: 0 4px 18px rgba(120,53,15,0.18);
+  }
+  .top-row { display:flex; justify-content:space-between; align-items:center; padding-top:10px; }
+  .brand { display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:0.3px; }
+  .brand .logo { width:32px; height:32px; border-radius:8px; background:var(--amber-100); color:var(--amber-700);
+    display:grid; place-items:center; font-weight:900; font-size:14px; box-shadow: inset 0 0 0 2px rgba(255,255,255,0.4); }
+  .brand .title { font-size:18px; }
+  .brand .sub { font-size:11px; opacity:0.85; font-weight:500; margin-top:-2px; display:block; }
+  .top-meta { display:flex; gap:6px; align-items:center; font-size:12px; }
+  .pill { padding:5px 10px; background:rgba(255,255,255,0.15); border-radius:999px; font-weight:600; backdrop-filter:saturate(1.4); }
+  .pill.dday { background:var(--amber-100); color:var(--amber-700); }
+  .iconbtn { width:36px; height:36px; border-radius:50%; display:grid; place-items:center; background:rgba(255,255,255,0.15); }
+  .iconbtn:active { background:rgba(255,255,255,0.3); }
+
+  main { flex: 1; padding: 12px 14px 100px; }
+
+  /* ─── HARNESS: Bottom Nav ─────────────────────────────────────────── */
+  nav.bottom {
+    position: fixed; bottom: 0; left:0; right:0; z-index: 20;
+    background: rgba(255,255,255,0.92); backdrop-filter: blur(14px) saturate(1.6);
+    border-top: 1px solid var(--line);
+    padding: 6px 0 calc(6px + var(--safe-bottom));
+    display: grid; grid-template-columns: repeat(5, 1fr);
+  }
+  nav.bottom button {
+    display:flex; flex-direction:column; align-items:center; gap:2px; padding:8px 4px;
+    color: var(--muted); font-size:11px; font-weight:600; transition: color .15s;
+  }
+  nav.bottom button .nav-icon { font-size:20px; line-height:1; }
+  nav.bottom button.active { color: var(--amber-700); }
+  nav.bottom button.active .nav-icon { transform: scale(1.1); }
+  @media (prefers-color-scheme: dark) {
+    nav.bottom { background: rgba(35,32,26,0.92); }
+  }
+
+  /* ─── HARNESS: Day pills ─────────────────────────────────────────── */
+  .day-strip { display:flex; gap:8px; overflow-x:auto; padding:4px 2px 8px; margin: -4px -4px 8px; scroll-snap-type:x mandatory; }
+  .day-strip > .chip { scroll-snap-align:start; }
+  .chip {
+    flex: 0 0 auto; padding: 8px 14px; border-radius:999px; background:var(--card);
+    border: 1px solid var(--line); font-weight:700; font-size:13px; color:var(--ink-2);
+    box-shadow: var(--shadow);
+  }
+  .chip.active { background: var(--amber-700); color:#fff; border-color: var(--amber-700); }
+  .chip.listening { background:#cffafe; color:var(--info); border-color:#67e8f9; }
+  .chip.listening.active { background:var(--info); color:#fff; }
+  .chip.all { background:var(--amber-100); color:var(--amber-900); border-color:var(--amber-200); }
+  .chip.all.active { background:var(--amber-900); color:#fff; }
+
+  /* ─── HARNESS: Word card ─────────────────────────────────────────── */
+  .word-list { display:flex; flex-direction:column; gap:10px; }
+  .word-card {
+    background:var(--card); border-radius:var(--radius); padding:14px 16px;
+    box-shadow: var(--shadow); border:1px solid var(--line);
+  }
+  .word-card .row1 { display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; }
+  .word-card .w { font-size:20px; font-weight:800; color:var(--ink); letter-spacing:-0.2px; }
+  .word-card .ipa { font-family: Georgia, serif; color:var(--muted); font-size:14px; }
+  .word-card .pos { font-size:11px; padding:2px 7px; background:var(--amber-100); color:var(--amber-700); border-radius:6px; font-weight:700; }
+  .word-card .ko { color:var(--ink); font-size:15px; margin: 6px 0 4px; }
+  .word-card .syn { color:var(--muted); font-size:13px; font-style:italic; }
+  .word-card .ex { color:var(--ink-2); font-size:14px; margin-top:8px; padding:8px 10px; background:var(--amber-50); border-left:3px solid var(--amber-500); border-radius:var(--radius-sm); }
+  .word-card .exko { color:var(--muted); font-size:13px; margin-top:3px; }
+  .word-card .note { color:var(--info); font-size:12px; margin-top:6px; padding:6px 8px; background:#ecfeff; border-radius:8px; font-weight:600; }
+  @media (prefers-color-scheme: dark) {
+    .word-card .note { background:#0a3540; color:#67e8f9; }
+  }
+  .word-card .actions { display:flex; gap:6px; margin-top:10px; }
+  .tts-btn {
+    padding: 6px 10px; border-radius: 8px; background:var(--amber-100); color:var(--amber-700);
+    font-weight:700; font-size:13px; display:inline-flex; align-items:center; gap:4px;
+  }
+  .tts-btn:active { transform: scale(0.96); }
+  .tts-btn.slow { background: #dbeafe; color:#1e40af; }
+  .star {
+    margin-left:auto; padding:6px 10px; border-radius:8px; color:var(--muted); font-size:18px;
+  }
+  .star.on { color: var(--amber-500); }
+
+  /* ─── HARNESS: Search & Stats Header ─────────────────────────────────────────── */
+  .search {
+    width:100%; padding: 11px 14px; border-radius:10px; background:var(--card); border:1px solid var(--line);
+    color:var(--ink); box-shadow:var(--shadow); margin-bottom:10px;
+  }
+  .progress-bar { height:6px; background:var(--line); border-radius:99px; overflow:hidden; margin-top:6px; }
+  .progress-bar > div { height:100%; background: linear-gradient(90deg, var(--amber-600), var(--amber-500)); transition: width .3s; }
+
+  /* ─── HARNESS: Flashcard ─────────────────────────────────────────── */
+  .flash-stage { padding: 8px 0 4px; }
+  .flash-card {
+    background: linear-gradient(180deg, var(--card), var(--amber-50));
+    border-radius: 20px; min-height: 380px;
+    padding: 28px 24px; box-shadow: var(--shadow);
+    border:1px solid var(--line); position:relative;
+    display:flex; flex-direction:column; justify-content:center; align-items:center; gap:14px; text-align:center;
+    transition: transform .35s cubic-bezier(.2,.8,.2,1), opacity .25s;
+  }
+  .flash-card.swipe-left { transform: translateX(-120%) rotate(-6deg); opacity:0; }
+  .flash-card.swipe-right { transform: translateX(120%) rotate(6deg); opacity:0; }
+  .flash-w { font-size: 36px; font-weight: 900; letter-spacing:-0.5px; color:var(--ink); }
+  .flash-ipa { font-family: Georgia, serif; color: var(--muted); font-size:18px; }
+  .flash-pos { font-size:12px; padding:3px 9px; background:var(--amber-100); color:var(--amber-700); border-radius:7px; font-weight:700; }
+  .flash-hint { color:var(--muted); font-size:13px; margin-top:14px; }
+  .flash-back { display:none; }
+  .flash-card.flipped .flash-front { display:none; }
+  .flash-card.flipped .flash-back { display:flex; flex-direction:column; gap:10px; }
+  .flash-back .ko { font-size:24px; font-weight:800; color: var(--amber-700); }
+  .flash-back .syn { color:var(--muted); font-style:italic; font-size:15px; }
+  .flash-back .ex { color:var(--ink-2); font-size:15px; padding:10px 14px; background: var(--amber-50); border-radius:10px; border-left:3px solid var(--amber-500); margin-top:8px; }
+  .flash-back .exko { color:var(--muted); font-size:14px; }
+
+  .flash-controls { display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-top:14px; }
+  .btn { padding: 14px; border-radius: 12px; font-weight:700; font-size:15px; }
+  .btn-bad { background:#fee2e2; color:var(--bad); }
+  .btn-ok { background:#dcfce7; color:var(--ok); }
+  .btn-primary { background: var(--amber-700); color:#fff; }
+  .btn-ghost { background:var(--card); color:var(--ink-2); border:1px solid var(--line); }
+  .btn-primary:active, .btn-ghost:active { transform: scale(0.98); }
+
+  .flash-meta { display:flex; justify-content:space-between; align-items:center; padding: 6px 4px; color:var(--muted); font-size:13px; font-weight:600; }
+  .flash-meta .progress-bar { flex:1; margin: 0 12px; }
+
+  .flash-tts { position:absolute; top:14px; right:14px; display:flex; gap:6px; }
+
+  /* ─── HARNESS: Quiz ─────────────────────────────────────────── */
+  .quiz-setup { display:flex; flex-direction:column; gap:12px; padding:6px 0; }
+  .quiz-setup label { font-size:13px; color:var(--muted); font-weight:700; }
+  .quiz-mode { display:grid; grid-template-columns: 1fr 1fr; gap:8px; }
+  .quiz-mode .chip { text-align:center; padding:14px; }
+  .quiz-q {
+    background:var(--card); padding: 20px 18px; border-radius:var(--radius); box-shadow:var(--shadow); border:1px solid var(--line);
+    text-align:center; margin-bottom:14px;
+  }
+  .quiz-q .label { font-size:11px; color:var(--muted); font-weight:700; text-transform:uppercase; letter-spacing:1px; }
+  .quiz-q .prompt { font-size:28px; font-weight:800; margin: 10px 0 6px; color:var(--ink); }
+  .quiz-q .ipa { color:var(--muted); font-family:Georgia,serif; font-size:14px; }
+  .quiz-choices { display:flex; flex-direction:column; gap:8px; }
+  .quiz-choice {
+    text-align:left; padding: 14px 16px; border-radius: 12px; background:var(--card);
+    border:1px solid var(--line); font-weight:600; color:var(--ink); box-shadow:var(--shadow);
+    display:flex; align-items:center; gap:10px;
+  }
+  .quiz-choice .num { width:24px; height:24px; border-radius:6px; background:var(--amber-100); color:var(--amber-700); display:grid; place-items:center; font-weight:800; font-size:13px; }
+  .quiz-choice.right { background:#dcfce7; border-color:#86efac; color:var(--ok); }
+  .quiz-choice.right .num { background:var(--ok); color:#fff; }
+  .quiz-choice.wrong { background:#fee2e2; border-color:#fca5a5; color:var(--bad); }
+  .quiz-choice.wrong .num { background:var(--bad); color:#fff; }
+  .quiz-choice:disabled { cursor:default; }
+  .quiz-bar { display:flex; justify-content:space-between; align-items:center; padding: 4px 4px 10px; color:var(--muted); font-size:13px; font-weight:700; }
+  .quiz-result { text-align:center; padding: 20px; background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); }
+  .quiz-result h2 { margin: 0 0 8px; font-size:32px; color:var(--amber-700); }
+  .quiz-result .score { font-size:18px; color:var(--ink-2); margin-bottom:14px; }
+  .quiz-result .wrong-list { text-align:left; margin-top:14px; }
+  .quiz-result .wrong-list h3 { font-size:14px; color:var(--bad); margin: 0 0 6px; }
+  .quiz-result .wrong-list .word-card { margin-bottom:6px; }
+
+  /* ─── HARNESS: SRS ─────────────────────────────────────────── */
+  .srs-overview { display:grid; grid-template-columns: repeat(5, 1fr); gap:8px; margin-bottom:14px; }
+  .srs-box {
+    text-align:center; padding: 12px 6px; border-radius:var(--radius-sm); background:var(--card); border:1px solid var(--line); box-shadow:var(--shadow);
+  }
+  .srs-box .label { font-size:10px; color:var(--muted); font-weight:700; letter-spacing:0.5px; }
+  .srs-box .count { font-size:22px; font-weight:800; color:var(--amber-700); margin-top:4px; }
+  .srs-box .interval { font-size:10px; color:var(--muted); margin-top:2px; }
+  .srs-banner {
+    background: linear-gradient(135deg, var(--amber-700), var(--amber-600));
+    color:#fff; padding:18px; border-radius:var(--radius); margin-bottom:12px;
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .srs-banner .due { font-size:13px; opacity:0.9; font-weight:600; }
+  .srs-banner .count { font-size:36px; font-weight:900; margin-top:2px; }
+  .srs-banner button { padding:10px 18px; background:#fff; color:var(--amber-700); border-radius:10px; font-weight:800; font-size:14px; }
+  .srs-banner button:active { transform: scale(0.96); }
+
+  /* ─── HARNESS: Stats ─────────────────────────────────────────── */
+  .stat-grid { display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:12px; }
+  .stat-card { background:var(--card); padding:14px; border-radius:var(--radius); box-shadow:var(--shadow); border:1px solid var(--line); }
+  .stat-card .label { font-size:11px; color:var(--muted); font-weight:700; text-transform:uppercase; letter-spacing:0.5px; }
+  .stat-card .val { font-size:26px; font-weight:800; color:var(--amber-700); margin-top:4px; }
+  .stat-card .sub { font-size:12px; color:var(--muted); margin-top:2px; }
+  .day-stats { background:var(--card); padding:14px 16px; border-radius:var(--radius); box-shadow:var(--shadow); border:1px solid var(--line); }
+  .day-stats h3 { margin: 0 0 10px; font-size:14px; color:var(--ink-2); }
+  .day-stats .row { display:flex; align-items:center; gap:10px; padding: 6px 0; border-bottom:1px solid var(--line); }
+  .day-stats .row:last-child { border-bottom:none; }
+  .day-stats .row .name { width:80px; font-size:13px; font-weight:700; color:var(--ink-2); }
+  .day-stats .row .bar { flex:1; }
+  .day-stats .row .pct { font-size:12px; color:var(--muted); width:46px; text-align:right; }
+
+  /* ─── HARNESS: Empty/error states ─────────────────────────────────────────── */
+  .empty { text-align:center; padding: 50px 20px; color:var(--muted); }
+  .empty .icon { font-size:48px; margin-bottom:8px; opacity:0.5; }
+
+  .loader { text-align:center; padding: 60px 20px; color:var(--muted); }
+  .toast {
+    position: fixed; bottom: calc(80px + var(--safe-bottom)); left: 50%; transform: translateX(-50%);
+    background: rgba(28,27,24,0.92); color:#fff; padding: 10px 18px; border-radius:24px;
+    font-size:13px; font-weight:600; z-index:100; pointer-events:none;
+    opacity:0; transition: opacity .25s;
+  }
+  .toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ─── HEADER ─────────────────────────────────────────── -->
+  <header class="top">
+    <div class="top-row">
+      <div class="brand">
+        <div class="logo">T</div>
+        <div>
+          <div class="title">TEPS 387</div>
+          <span class="sub">목표 387점 · 2급 · 매일 25단어</span>
+        </div>
+      </div>
+      <div class="top-meta">
+        <span class="pill dday" id="dday">D-?</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ─── MAIN ─────────────────────────────────────────── -->
+  <main id="main">
+    <div class="loader">단어 데이터 로딩 중...</div>
+  </main>
+
+  <!-- ─── BOTTOM NAV ─────────────────────────────────────────── -->
+  <nav class="bottom" id="nav">
+    <button data-tab="vocab" class="active"><span class="nav-icon">📖</span>단어장</button>
+    <button data-tab="flash"><span class="nav-icon">🃏</span>카드</button>
+    <button data-tab="quiz"><span class="nav-icon">❓</span>퀴즈</button>
+    <button data-tab="srs"><span class="nav-icon">🔄</span>SRS</button>
+    <button data-tab="stats"><span class="nav-icon">📊</span>통계</button>
+  </nav>
+
+  <div class="toast" id="toast"></div>
+</div>
+
+<script>
+/* ────────────────────────────────────────────────────────────────
+   HARNESS Architecture
+   - DATA layer  : VocabRepo (vocabulary.json fetch + memory)
+   - STATE layer : Store (localStorage-backed progress/SRS state)
+   - LOGIC layer : SRS, Quiz, TTS, Stats
+   - VIEW  layer : Tabs (vocab / flash / quiz / srs / stats)
+   - APP   shell : init, route
+   ──────────────────────────────────────────────────────────────── */
+
+/* ─── STORAGE ─────────────────────────────────────────── */
+const Store = {
+  _k: 'teps387.v1',
+  load() {
+    try { return JSON.parse(localStorage.getItem(this._k)) || this._default(); }
+    catch { return this._default(); }
+  },
+  save(s) { localStorage.setItem(this._k, JSON.stringify(s)); },
+  _default() {
+    return {
+      progress: {},     // wordId -> { box:1-5, lastReviewed:ts, correct:n, total:n, lastResult: 'right'|'wrong' }
+      starred: {},      // wordId -> true
+      quizHistory: [],  // { date, mode, score, total, wrong:[wordId] }
+      streak: { last:null, days:0 },
+      settings: { autoTTS:false, ttsRate:0.95, slowRate:0.55 }
+    };
+  }
+};
+
+/* ─── SRS (Leitner) ─────────────────────────────────────────── */
+const SRS = {
+  intervals: [null, 1, 3, 7, 14, 30],   // days for boxes 1..5
+  labels: ['Box 1', 'Box 2', 'Box 3', 'Box 4', 'Box 5'],
+  intervalLabels: ['매일', '3일 후', '7일 후', '2주 후', '한 달 후'],
+
+  /** Process result: correct → next box, wrong → box 1 */
+  apply(state, wordId, correct) {
+    const p = state.progress[wordId] || { box:0, correct:0, total:0 };
+    p.total += 1;
+    if (correct) {
+      p.correct += 1;
+      p.box = Math.min(5, (p.box || 0) + 1);
+      p.lastResult = 'right';
+    } else {
+      p.box = 1;
+      p.lastResult = 'wrong';
+    }
+    p.lastReviewed = Date.now();
+    state.progress[wordId] = p;
+  },
+
+  /** Is this word due today? */
+  isDue(p, now=Date.now()) {
+    if (!p || !p.box) return true;        // never studied → due
+    const days = this.intervals[p.box] || 1;
+    const last = p.lastReviewed || 0;
+    return (now - last) >= days * 24 * 3600 * 1000;
+  },
+
+  /** Get all due words */
+  due(state, words, now=Date.now()) {
+    return words.filter(w => this.isDue(state.progress[w.id], now));
+  },
+
+  /** Counts per box */
+  boxCounts(state, words) {
+    const counts = [0,0,0,0,0,0]; // index 0 = unstudied
+    words.forEach(w => {
+      const p = state.progress[w.id];
+      const b = (p && p.box) ? p.box : 0;
+      counts[b] += 1;
+    });
+    return counts;
+  }
+};
+
+/* ─── TTS ─────────────────────────────────────────── */
+const TTS = {
+  _voice: null,
+  init() {
+    if (!('speechSynthesis' in window)) return;
+    const pick = () => {
+      const v = speechSynthesis.getVoices();
+      if (!v.length) return;
+      this._voice =
+        v.find(x => /en-US/i.test(x.lang) && /Samantha|Alex|Google US|Aaron|Nicky|Joanna|Daniel/i.test(x.name))
+        || v.find(x => /^en-?US/i.test(x.lang))
+        || v.find(x => /^en/i.test(x.lang))
+        || v[0];
+    };
+    pick();
+    speechSynthesis.onvoiceschanged = pick;
+  },
+  speak(text, rate=null) {
+    if (!('speechSynthesis' in window)) { Toast.show('이 브라우저는 음성 합성을 지원하지 않습니다'); return; }
+    const s = Store.load().settings;
+    const u = new SpeechSynthesisUtterance(text);
+    if (this._voice) u.voice = this._voice;
+    u.lang = 'en-US';
+    u.rate = rate || s.ttsRate || 0.95;
+    u.pitch = 1.0;
+    speechSynthesis.cancel();
+    speechSynthesis.speak(u);
+  },
+  slow(text) { const s = Store.load().settings; this.speak(text, s.slowRate || 0.55); }
+};
+
+/* ─── DATA ─────────────────────────────────────────── */
+const VocabRepo = {
+  data: null,
+  async load() {
+    if (this.data) return this.data;
+    const resp = await fetch('vocabulary.json', { cache: 'no-cache' });
+    this.data = await resp.json();
+    return this.data;
+  },
+  allWords(filter=null) {
+    if (!this.data) return [];
+    let list = [];
+    this.data.days.forEach(d => {
+      d.words.forEach(w => list.push({ ...w, day: d.day, dayLabel: d.label || `Day ${d.day}`, category: d.category }));
+    });
+    if (filter) list = list.filter(filter);
+    return list;
+  },
+  byDay(dayKey) {
+    if (dayKey === 'all') return this.allWords();
+    if (dayKey === 'starred') {
+      const s = Store.load().starred;
+      return this.allWords(w => s[w.id]);
+    }
+    return this.allWords(w => `${w.day}` === `${dayKey}`);
+  },
+  dayMeta() {
+    return this.data.days.map(d => ({
+      key: d.day, label: d.label || `Day ${d.day}`, category: d.category, count: d.words.length, date: d.date
+    }));
+  }
+};
+
+/* ─── UTIL ─────────────────────────────────────────── */
+const $ = (s, root=document) => root.querySelector(s);
+const $$ = (s, root=document) => Array.from(root.querySelectorAll(s));
+const el = (tag, props={}, ...children) => {
+  const e = document.createElement(tag);
+  Object.entries(props).forEach(([k,v]) => {
+    if (k === 'class') e.className = v;
+    else if (k === 'html') e.innerHTML = v;
+    else if (k.startsWith('on')) e.addEventListener(k.slice(2).toLowerCase(), v);
+    else if (k === 'dataset') Object.entries(v).forEach(([dk,dv]) => e.dataset[dk] = dv);
+    else if (v != null) e.setAttribute(k, v);
+  });
+  children.flat().forEach(c => e.append(c instanceof Node ? c : document.createTextNode(c)));
+  return e;
+};
+const Toast = {
+  el: null,
+  show(msg, ms=1600) {
+    if (!this.el) this.el = $('#toast');
+    this.el.textContent = msg;
+    this.el.classList.add('show');
+    clearTimeout(this._t);
+    this._t = setTimeout(() => this.el.classList.remove('show'), ms);
+  }
+};
+const escapeHtml = (s) => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const dday = (examDate) => {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const exam = new Date(examDate); exam.setHours(0,0,0,0);
+  return Math.round((exam - today) / (24*3600*1000));
+};
+const shuffle = (a) => { const arr = a.slice(); for (let i=arr.length-1;i>0;i--){ const j=(Math.random()*(i+1))|0; [arr[i],arr[j]]=[arr[j],arr[i]]; } return arr; };
+
+/* ─── WORD CARD RENDERER (shared) ─────────────────────────────────────────── */
+function renderWordCard(w, opts={}) {
+  const s = Store.load();
+  const starred = !!s.starred[w.id];
+  const card = el('div', { class:'word-card', dataset:{ id: w.id } });
+  card.innerHTML = `
+    <div class="row1">
+      <span class="w">${escapeHtml(w.w)}</span>
+      <span class="ipa">${escapeHtml(w.ipa || '')}</span>
+      ${w.pos ? `<span class="pos">${escapeHtml(w.pos)}</span>` : ''}
+    </div>
+    <div class="ko">${escapeHtml(w.ko || '')}</div>
+    ${w.syn && w.syn.length ? `<div class="syn">syn: ${w.syn.map(escapeHtml).join(', ')}</div>` : ''}
+    ${w.ex ? `<div class="ex">${escapeHtml(w.ex)}</div>` : ''}
+    ${w.exKo ? `<div class="exko">→ ${escapeHtml(w.exKo)}</div>` : ''}
+    ${w.note ? `<div class="note">💡 ${escapeHtml(w.note)}</div>` : ''}
+    <div class="actions">
+      <button class="tts-btn" data-act="play">🔊 발음</button>
+      <button class="tts-btn slow" data-act="slow">🐢 천천히</button>
+      <button class="star ${starred ? 'on' : ''}" data-act="star">${starred ? '★' : '☆'}</button>
+    </div>
+  `;
+  card.addEventListener('click', (e) => {
+    const act = e.target.closest('[data-act]')?.dataset.act;
+    if (act === 'play') { TTS.speak(w.w); TTS.speak(w.ex); }
+    else if (act === 'slow') { TTS.slow(w.w); }
+    else if (act === 'star') {
+      const ss = Store.load();
+      if (ss.starred[w.id]) delete ss.starred[w.id]; else ss.starred[w.id] = true;
+      Store.save(ss);
+      const btn = e.target.closest('.star');
+      btn.classList.toggle('on'); btn.textContent = btn.classList.contains('on') ? '★' : '☆';
+    }
+  });
+  return card;
+}
+
+/* ─── TAB: VOCAB ─────────────────────────────────────────── */
+const VocabView = {
+  currentDay: null,
+  query: '',
+  render(main) {
+    const days = VocabRepo.dayMeta();
+    if (this.currentDay == null) {
+      // Default to most recent vocab day
+      const vocabDays = days.filter(d => d.category === 'vocab');
+      this.currentDay = vocabDays.length ? vocabDays[vocabDays.length-1].key : days[0]?.key;
+    }
+    main.innerHTML = '';
+
+    // Day strip
+    const strip = el('div', { class: 'day-strip' });
+    strip.append(this._chip('all', '전체', this.currentDay === 'all', 'all'));
+    strip.append(this._chip('starred', '⭐ 즐겨찾기', this.currentDay === 'starred', 'all'));
+    days.filter(d => d.category === 'vocab').forEach(d => {
+      strip.append(this._chip(d.key, `Day ${d.key}`, this.currentDay == d.key));
+    });
+    days.filter(d => d.category === 'listening').forEach(d => {
+      strip.append(this._chip(d.key, `🎧 ${d.label}`, this.currentDay == d.key, 'listening'));
+    });
+    main.append(strip);
+
+    // Search
+    const search = el('input', {
+      class: 'search', type: 'search', placeholder: '단어, 한국어 뜻, 동의어 검색...', value: this.query,
+      oninput: (e) => { this.query = e.target.value.trim().toLowerCase(); this._refreshList(); }
+    });
+    main.append(search);
+
+    // List container
+    const list = el('div', { class: 'word-list', id: 'word-list' });
+    main.append(list);
+    this._refreshList();
+  },
+  _chip(key, label, active, extra='') {
+    return el('button', {
+      class: `chip ${active ? 'active' : ''} ${extra}`,
+      onclick: () => { this.currentDay = key; App.route('vocab'); }
+    }, label);
+  },
+  _refreshList() {
+    const list = $('#word-list'); if (!list) return;
+    let words = VocabRepo.byDay(this.currentDay);
+    if (this.query) {
+      const q = this.query;
+      words = words.filter(w =>
+        w.w.toLowerCase().includes(q) ||
+        (w.ko || '').includes(q) ||
+        (w.syn || []).some(s => s.toLowerCase().includes(q))
+      );
+    }
+    list.innerHTML = '';
+    if (!words.length) {
+      list.append(el('div', { class: 'empty' }, el('div', {class:'icon'}, '🔍'), '검색 결과가 없습니다'));
+      return;
+    }
+    words.forEach(w => list.append(renderWordCard(w)));
+  }
+};
+
+/* ─── TAB: FLASHCARD ─────────────────────────────────────────── */
+const FlashView = {
+  pool: [],
+  idx: 0,
+  flipped: false,
+  source: 'today',   // 'today' (SRS due) | 'all' | 'day-X'
+  render(main) {
+    main.innerHTML = '';
+    // Source picker
+    const strip = el('div', { class: 'day-strip' });
+    strip.append(this._chip('today', '🎯 오늘의 복습', this.source === 'today'));
+    strip.append(this._chip('all', '전체', this.source === 'all'));
+    strip.append(this._chip('starred', '⭐ 즐겨찾기', this.source === 'starred'));
+    VocabRepo.dayMeta().filter(d => d.category === 'vocab').forEach(d => {
+      strip.append(this._chip(`day-${d.key}`, `Day ${d.key}`, this.source === `day-${d.key}`));
+    });
+    main.append(strip);
+
+    this._buildPool();
+    if (!this.pool.length) {
+      main.append(el('div', { class:'empty' }, el('div',{class:'icon'},'🎉'), '오늘 복습할 단어가 없어요!', el('br'), el('small', { class:'sub' }, '다른 소스를 선택해 보세요.')));
+      return;
+    }
+
+    // Meta bar
+    const meta = el('div', { class: 'flash-meta' });
+    meta.innerHTML = `<span>${this.idx+1} / ${this.pool.length}</span><div class="progress-bar"><div style="width:${((this.idx+1)/this.pool.length)*100}%"></div></div><span id="flash-box-label">·</span>`;
+    main.append(meta);
+
+    // Card
+    const w = this.pool[this.idx];
+    const p = Store.load().progress[w.id];
+    $('#flash-box-label', meta).textContent = p && p.box ? `${SRS.labels[p.box-1]}` : '새 단어';
+    const card = el('div', { class: 'flash-card' + (this.flipped ? ' flipped' : '') });
+    card.innerHTML = `
+      <div class="flash-tts">
+        <button class="tts-btn" data-act="play">🔊</button>
+        <button class="tts-btn slow" data-act="slow">🐢</button>
+      </div>
+      <div class="flash-front">
+        <div class="flash-pos">${escapeHtml(w.pos || '')}</div>
+        <div class="flash-w">${escapeHtml(w.w)}</div>
+        <div class="flash-ipa">${escapeHtml(w.ipa || '')}</div>
+        <div class="flash-hint">탭하면 뜻이 보입니다</div>
+      </div>
+      <div class="flash-back">
+        <div class="ko">${escapeHtml(w.ko || '')}</div>
+        ${w.syn && w.syn.length ? `<div class="syn">syn: ${w.syn.map(escapeHtml).join(', ')}</div>` : ''}
+        ${w.ex ? `<div class="ex">${escapeHtml(w.ex)}</div>` : ''}
+        ${w.exKo ? `<div class="exko">→ ${escapeHtml(w.exKo)}</div>` : ''}
+      </div>
+    `;
+    card.addEventListener('click', (e) => {
+      const act = e.target.closest('[data-act]')?.dataset.act;
+      if (act === 'play') { e.stopPropagation(); TTS.speak(w.w); setTimeout(() => TTS.speak(w.ex), 800); return; }
+      if (act === 'slow') { e.stopPropagation(); TTS.slow(w.w); return; }
+      this.flipped = !this.flipped;
+      App.route('flash');
+    });
+    main.append(card);
+
+    // Controls
+    if (this.flipped) {
+      const controls = el('div', { class: 'flash-controls' });
+      controls.append(
+        el('button', { class:'btn btn-bad', onclick: () => this._answer(false) }, '😖 모르겠어'),
+        el('button', { class:'btn btn-ok', onclick: () => this._answer(true) }, '😎 알았어')
+      );
+      main.append(controls);
+    } else {
+      const controls = el('div', { class: 'flash-controls' });
+      controls.append(
+        el('button', { class:'btn btn-ghost', onclick: () => this._skip(-1) }, '← 이전'),
+        el('button', { class:'btn btn-primary', onclick: () => { this.flipped = true; App.route('flash'); } }, '뜻 보기')
+      );
+      main.append(controls);
+    }
+    if (Store.load().settings.autoTTS) TTS.speak(w.w);
+  },
+  _chip(key, label, active) {
+    return el('button', {
+      class: `chip ${active ? 'active' : ''}` + (key.includes('day-') ? '' : ' all'),
+      onclick: () => { this.source = key; this.idx = 0; this.flipped = false; this._buildPool(); App.route('flash'); }
+    }, label);
+  },
+  _buildPool() {
+    const s = Store.load();
+    let pool;
+    if (this.source === 'today') {
+      pool = SRS.due(s, VocabRepo.allWords(w => w.category === 'vocab'));
+      pool = shuffle(pool).slice(0, 50);
+    } else if (this.source === 'all') pool = shuffle(VocabRepo.allWords());
+    else if (this.source === 'starred') pool = VocabRepo.allWords(w => s.starred[w.id]);
+    else if (this.source.startsWith('day-')) pool = shuffle(VocabRepo.byDay(this.source.slice(4)));
+    else pool = [];
+    this.pool = pool;
+    if (this.idx >= this.pool.length) this.idx = 0;
+  },
+  _answer(correct) {
+    const w = this.pool[this.idx];
+    const s = Store.load();
+    SRS.apply(s, w.id, correct);
+    Store.save(s);
+    Toast.show(correct ? `✓ ${SRS.labels[s.progress[w.id].box-1]}로 이동` : '✗ Box 1로 리셋');
+    this._skip(1);
+  },
+  _skip(dir) {
+    this.flipped = false;
+    this.idx = (this.idx + dir + this.pool.length) % this.pool.length;
+    App.route('flash');
+  }
+};
+
+/* ─── TAB: QUIZ ─────────────────────────────────────────── */
+const QuizView = {
+  state: 'setup',         // 'setup' | 'playing' | 'result'
+  mode: 'en-ko',          // 'en-ko' | 'ko-en' | 'syn'
+  dayKey: 'all',
+  questions: [],
+  idx: 0,
+  score: 0,
+  wrong: [],
+  render(main) {
+    main.innerHTML = '';
+    if (this.state === 'setup') return this._renderSetup(main);
+    if (this.state === 'playing') return this._renderQuestion(main);
+    if (this.state === 'result') return this._renderResult(main);
+  },
+  _renderSetup(main) {
+    const setup = el('div', { class: 'quiz-setup' });
+    setup.append(el('label', {}, '문제 형식'));
+    const modes = el('div', { class: 'quiz-mode' });
+    [['en-ko','영→한'],['ko-en','한→영'],['syn','동의어 찾기'],['ipa','발음 듣고 맞히기']].forEach(([k,l]) => {
+      modes.append(el('button', {
+        class: 'chip' + (this.mode === k ? ' active' : ''),
+        onclick: () => { this.mode = k; this.render(main); }
+      }, l));
+    });
+    setup.append(modes);
+
+    setup.append(el('label', {}, '범위 (어느 단어를 출제할까요?)'));
+    const days = el('div', { class: 'day-strip' });
+    days.append(el('button', {
+      class: 'chip all' + (this.dayKey === 'all' ? ' active' : ''),
+      onclick: () => { this.dayKey = 'all'; this.render(main); }
+    }, '전체'));
+    days.append(el('button', {
+      class: 'chip all' + (this.dayKey === 'starred' ? ' active' : ''),
+      onclick: () => { this.dayKey = 'starred'; this.render(main); }
+    }, '⭐ 즐겨찾기'));
+    VocabRepo.dayMeta().filter(d => d.category === 'vocab').forEach(d => {
+      days.append(el('button', {
+        class: 'chip' + (this.dayKey == d.key ? ' active' : ''),
+        onclick: () => { this.dayKey = d.key; this.render(main); }
+      }, `Day ${d.key}`));
+    });
+    setup.append(days);
+
+    setup.append(el('button', {
+      class: 'btn btn-primary',
+      style: 'margin-top:14px;',
+      onclick: () => this._start()
+    }, '🎯 퀴즈 시작 (10문제)'));
+    main.append(setup);
+  },
+  _start() {
+    const pool = this.dayKey === 'all'
+      ? VocabRepo.allWords(w => w.category === 'vocab')
+      : VocabRepo.byDay(this.dayKey);
+    if (pool.length < 4) { Toast.show('단어가 너무 적어요 (최소 4개 필요)'); return; }
+    const n = Math.min(10, pool.length);
+    const picked = shuffle(pool).slice(0, n);
+    const distractorPool = VocabRepo.allWords(w => w.category === 'vocab');
+    this.questions = picked.map(target => {
+      const distractors = shuffle(distractorPool.filter(w => w.id !== target.id)).slice(0, 3);
+      return { target, choices: shuffle([target, ...distractors]) };
+    });
+    this.idx = 0; this.score = 0; this.wrong = []; this.state = 'playing';
+    App.route('quiz');
+  },
+  _renderQuestion(main) {
+    const q = this.questions[this.idx];
+    const w = q.target;
+
+    const bar = el('div', { class: 'quiz-bar' });
+    bar.innerHTML = `<span>문제 ${this.idx+1} / ${this.questions.length}</span><span>점수 ${this.score}</span>`;
+    main.append(bar);
+
+    const qEl = el('div', { class: 'quiz-q' });
+    let promptHtml = '';
+    let displayText = '';
+    if (this.mode === 'en-ko') {
+      promptHtml = `<div class="label">다음 단어의 뜻은?</div><div class="prompt">${escapeHtml(w.w)}</div><div class="ipa">${escapeHtml(w.ipa || '')}</div>`;
+    } else if (this.mode === 'ko-en') {
+      promptHtml = `<div class="label">다음 뜻을 가진 단어는?</div><div class="prompt">${escapeHtml(w.ko)}</div>`;
+    } else if (this.mode === 'syn') {
+      const syn = (w.syn && w.syn[0]) || w.ko;
+      promptHtml = `<div class="label">다음과 비슷한 단어는?</div><div class="prompt">${escapeHtml(syn)}</div>`;
+    } else if (this.mode === 'ipa') {
+      promptHtml = `<div class="label">발음을 듣고 맞는 단어를 고르세요</div><div class="prompt">🔊</div>`;
+      displayText = w.w;
+    }
+    qEl.innerHTML = promptHtml;
+    if (this.mode === 'ipa') {
+      qEl.append(el('button', { class:'btn btn-primary', style:'margin-top:10px;', onclick: () => TTS.speak(w.w) }, '🔊 다시 듣기'));
+      setTimeout(() => TTS.speak(w.w), 300);
+    }
+    main.append(qEl);
+
+    const choices = el('div', { class: 'quiz-choices' });
+    q.choices.forEach((c, i) => {
+      let text;
+      if (this.mode === 'en-ko') text = c.ko;
+      else if (this.mode === 'ko-en') text = c.w;
+      else if (this.mode === 'syn') text = c.w;
+      else text = c.w;
+      const btn = el('button', { class:'quiz-choice', dataset:{ id:c.id } },
+        el('span', { class:'num' }, String(i+1)),
+        text
+      );
+      btn.addEventListener('click', () => this._answer(c, btn));
+      choices.append(btn);
+    });
+    main.append(choices);
+  },
+  _answer(picked, btn) {
+    const q = this.questions[this.idx];
+    const correct = picked.id === q.target.id;
+    if (correct) { this.score += 1; btn.classList.add('right'); }
+    else {
+      btn.classList.add('wrong');
+      this.wrong.push(q.target);
+      // also reveal correct
+      $$('.quiz-choice').forEach(b => { if (b.dataset.id === q.target.id) b.classList.add('right'); });
+    }
+    // Apply to SRS as well
+    const s = Store.load();
+    SRS.apply(s, q.target.id, correct);
+    Store.save(s);
+    $$('.quiz-choice').forEach(b => b.disabled = true);
+    setTimeout(() => {
+      if (this.idx + 1 >= this.questions.length) {
+        const ss = Store.load();
+        ss.quizHistory.push({
+          date: Date.now(), mode: this.mode,
+          score: this.score, total: this.questions.length,
+          wrong: this.wrong.map(w => w.id)
+        });
+        // streak update
+        const today = new Date(); today.setHours(0,0,0,0);
+        const last = ss.streak.last ? new Date(ss.streak.last) : null;
+        if (last) last.setHours(0,0,0,0);
+        if (!last) { ss.streak = { last: today.getTime(), days: 1 }; }
+        else if (last.getTime() === today.getTime()) { /* already counted */ }
+        else if (today - last === 24*3600*1000) { ss.streak = { last: today.getTime(), days: ss.streak.days + 1 }; }
+        else { ss.streak = { last: today.getTime(), days: 1 }; }
+        Store.save(ss);
+        this.state = 'result';
+      } else {
+        this.idx += 1;
+      }
+      App.route('quiz');
+    }, 850);
+  },
+  _renderResult(main) {
+    const r = el('div', { class: 'quiz-result' });
+    const pct = Math.round((this.score / this.questions.length) * 100);
+    const emoji = pct === 100 ? '🏆' : pct >= 80 ? '🎉' : pct >= 60 ? '👍' : '💪';
+    r.innerHTML = `<h2>${emoji} ${pct}%</h2><div class="score">${this.score} / ${this.questions.length} 정답</div>`;
+    const actions = el('div', { class: 'flash-controls' });
+    actions.append(
+      el('button', { class:'btn btn-ghost', onclick: () => { this.state = 'setup'; App.route('quiz'); } }, '다시 설정'),
+      el('button', { class:'btn btn-primary', onclick: () => { this._start(); } }, '한 번 더 →')
+    );
+    r.append(actions);
+    main.append(r);
+
+    if (this.wrong.length) {
+      const wl = el('div', { class:'wrong-list', style:'margin-top:20px;' });
+      wl.append(el('h3', {}, `❌ 틀린 단어 ${this.wrong.length}개 (자동으로 SRS Box 1으로 이동했어요)`));
+      this.wrong.forEach(w => wl.append(renderWordCard(w)));
+      main.append(wl);
+    }
+  }
+};
+
+/* ─── TAB: SRS ─────────────────────────────────────────── */
+const SRSView = {
+  render(main) {
+    main.innerHTML = '';
+    const state = Store.load();
+    const allVocab = VocabRepo.allWords(w => w.category === 'vocab');
+    const due = SRS.due(state, allVocab);
+    const counts = SRS.boxCounts(state, allVocab);
+
+    const banner = el('div', { class:'srs-banner' });
+    banner.innerHTML = `
+      <div>
+        <div class="due">오늘 복습할 단어</div>
+        <div class="count">${due.length}개</div>
+      </div>
+      <button id="srs-start">시작 →</button>
+    `;
+    banner.querySelector('#srs-start').addEventListener('click', () => {
+      FlashView.source = 'today'; FlashView.idx = 0; FlashView.flipped = false;
+      App.switchTab('flash');
+    });
+    main.append(banner);
+
+    // Box overview
+    const grid = el('div', { class: 'srs-overview' });
+    for (let i = 1; i <= 5; i++) {
+      const box = el('div', { class:'srs-box' });
+      box.innerHTML = `<div class="label">${SRS.labels[i-1]}</div><div class="count">${counts[i]}</div><div class="interval">${SRS.intervalLabels[i-1]}</div>`;
+      grid.append(box);
+    }
+    main.append(grid);
+
+    // Stats
+    const total = allVocab.length;
+    const studied = total - counts[0];
+    const mastered = counts[5];
+    const stats = el('div', { class:'stat-grid' });
+    stats.append(
+      this._stat('학습 시작한 단어', `${studied}`, `전체 ${total}개 중 (${Math.round(studied/total*100)}%)`),
+      this._stat('마스터 단어 (Box 5)', `${mastered}`, '30일 후 복습 예정'),
+      this._stat('미학습 단어', `${counts[0]}`, '한 번도 본 적 없음'),
+      this._stat('오늘 복습 대상', `${due.length}`, '간격반복법 기준')
+    );
+    main.append(stats);
+
+    // How it works
+    const info = el('div', { class:'day-stats', style:'margin-top:14px;' });
+    info.innerHTML = `
+      <h3>🧠 Leitner 시스템이란?</h3>
+      <p style="font-size:13px; color:var(--muted); margin:0; line-height:1.7;">
+      단어를 5개 박스로 분류해서, 각 박스마다 다른 주기로 복습하는 방법이에요.<br/>
+      <b>맞히면</b> → 다음 박스로 (복습 주기 길어짐) · <b>틀리면</b> → Box 1으로 (다시 매일 복습)<br/>
+      퀴즈와 플래시카드 모두 SRS에 자동으로 반영됩니다.
+      </p>
+    `;
+    main.append(info);
+  },
+  _stat(label, val, sub) {
+    return el('div', { class:'stat-card' },
+      el('div', { class:'label' }, label),
+      el('div', { class:'val' }, val),
+      el('div', { class:'sub' }, sub)
+    );
+  }
+};
+
+/* ─── TAB: STATS ─────────────────────────────────────────── */
+const StatsView = {
+  render(main) {
+    main.innerHTML = '';
+    const state = Store.load();
+    const allVocab = VocabRepo.allWords(w => w.category === 'vocab');
+    const totalProg = Object.values(state.progress);
+    const totalCorrect = totalProg.reduce((s,p) => s + (p.correct||0), 0);
+    const totalAnswered = totalProg.reduce((s,p) => s + (p.total||0), 0);
+    const acc = totalAnswered ? Math.round(totalCorrect/totalAnswered*100) : 0;
+    const studied = totalProg.length;
+    const mastered = totalProg.filter(p => p.box === 5).length;
+    const starredCount = Object.keys(state.starred).length;
+
+    const grid = el('div', { class:'stat-grid' });
+    grid.append(
+      this._stat('🔥 학습 연속일', `${state.streak.days || 0}일`, state.streak.last ? '오늘도 도전!' : '시작해 보세요'),
+      this._stat('📚 학습한 단어', `${studied}`, `전체 ${allVocab.length}개 중`),
+      this._stat('🏆 마스터', `${mastered}`, 'Box 5 도달'),
+      this._stat('🎯 정답률', `${acc}%`, `${totalCorrect} / ${totalAnswered}`),
+      this._stat('⭐ 즐겨찾기', `${starredCount}`, '별표한 단어'),
+      this._stat('📝 퀴즈 풀이', `${state.quizHistory.length}회`, state.quizHistory.length ? `최근 ${state.quizHistory[state.quizHistory.length-1].score}/${state.quizHistory[state.quizHistory.length-1].total}` : '아직 없음')
+    );
+    main.append(grid);
+
+    // Day-by-day accuracy
+    const dayStats = el('div', { class:'day-stats' });
+    dayStats.append(el('h3', {}, '📅 Day별 학습 진도'));
+    VocabRepo.dayMeta().forEach(d => {
+      const words = VocabRepo.byDay(d.key);
+      const studied = words.filter(w => state.progress[w.id]).length;
+      const pct = words.length ? Math.round(studied/words.length*100) : 0;
+      const row = el('div', { class:'row' });
+      const bar = el('div', { class:'progress-bar bar' });
+      bar.innerHTML = `<div style="width:${pct}%"></div>`;
+      row.append(
+        el('span', { class:'name' }, d.category === 'listening' ? `🎧 ${d.label}` : `Day ${d.key}`),
+        bar,
+        el('span', { class:'pct' }, `${studied}/${words.length}`)
+      );
+      dayStats.append(row);
+    });
+    main.append(dayStats);
+
+    // Recent quiz history
+    if (state.quizHistory.length) {
+      const recent = state.quizHistory.slice(-5).reverse();
+      const hist = el('div', { class:'day-stats', style:'margin-top:14px;' });
+      hist.append(el('h3', {}, '🕘 최근 퀴즈'));
+      recent.forEach(q => {
+        const dt = new Date(q.date);
+        const pct = Math.round(q.score/q.total*100);
+        const row = el('div', { class:'row' });
+        const bar = el('div', { class:'progress-bar bar' });
+        bar.innerHTML = `<div style="width:${pct}%"></div>`;
+        row.append(
+          el('span', { class:'name' }, `${dt.getMonth()+1}/${dt.getDate()} ${String(dt.getHours()).padStart(2,'0')}:${String(dt.getMinutes()).padStart(2,'0')}`),
+          bar,
+          el('span', { class:'pct' }, `${q.score}/${q.total}`)
+        );
+        hist.append(row);
+      });
+      main.append(hist);
+    }
+
+    // Settings + Reset
+    const settings = el('div', { class:'day-stats', style:'margin-top:14px;' });
+    settings.append(el('h3', {}, '⚙️ 설정'));
+    const autoTTS = el('label', { style:'display:flex;align-items:center;gap:8px;padding:8px 0;cursor:pointer;font-size:14px;' },
+      el('input', {
+        type:'checkbox',
+        ...(state.settings.autoTTS ? { checked: 'checked' } : {}),
+        onchange: (e) => { const s = Store.load(); s.settings.autoTTS = e.target.checked; Store.save(s); Toast.show('설정 저장됨'); }
+      }),
+      '카드 넘길 때 자동 발음'
+    );
+    settings.append(autoTTS);
+    settings.append(el('button', {
+      class:'btn btn-ghost', style:'margin-top:10px; width:100%;',
+      onclick: () => {
+        if (!confirm('모든 학습 진도가 삭제됩니다. 정말 초기화할까요?')) return;
+        localStorage.removeItem(Store._k);
+        Toast.show('초기화 완료');
+        App.route('stats');
+      }
+    }, '학습 진도 초기화'));
+    main.append(settings);
+  },
+  _stat(label, val, sub) {
+    return el('div', { class:'stat-card' },
+      el('div', { class:'label' }, label),
+      el('div', { class:'val' }, val),
+      el('div', { class:'sub' }, sub)
+    );
+  }
+};
+
+/* ─── APP SHELL ─────────────────────────────────────────── */
+const App = {
+  currentTab: 'vocab',
+  tabs: { vocab: VocabView, flash: FlashView, quiz: QuizView, srs: SRSView, stats: StatsView },
+
+  async init() {
+    TTS.init();
+    try {
+      await VocabRepo.load();
+    } catch (e) {
+      $('#main').innerHTML = `<div class="empty"><div class="icon">⚠️</div>단어 데이터를 불러올 수 없습니다.<br/><small>${escapeHtml(e.message)}</small></div>`;
+      return;
+    }
+    // D-day badge
+    const exam = VocabRepo.data.meta.examDate;
+    const d = dday(exam);
+    $('#dday').textContent = d > 0 ? `D-${d}` : (d === 0 ? 'D-Day' : `D+${-d}`);
+    document.documentElement.classList.add('auto-dark');
+
+    // Tab nav binding
+    $$('#nav button').forEach(b => {
+      b.addEventListener('click', () => this.switchTab(b.dataset.tab));
+    });
+
+    // Register service worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').catch(err => console.warn('SW register failed:', err));
+    }
+
+    this.route(this.currentTab);
+  },
+
+  switchTab(tab) {
+    this.currentTab = tab;
+    $$('#nav button').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+    // Reset transient state when entering
+    if (tab === 'flash') { FlashView.idx = 0; FlashView.flipped = false; FlashView._buildPool(); }
+    if (tab === 'quiz') { QuizView.state = 'setup'; }
+    this.route(tab);
+  },
+
+  route(tab) {
+    this.tabs[tab || this.currentTab].render($('#main'));
+    // Scroll to top of main content after switch
+    if (tab !== this.currentTab) window.scrollTo({ top: 0 });
+  }
+};
+
+document.addEventListener('DOMContentLoaded', () => App.init());
+</script>
+</body>
+</html>
