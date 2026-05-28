@@ -2,644 +2,1987 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
-<meta name="theme-color" content="#b45309" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#f4f0e8" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-<meta name="apple-mobile-web-app-title" content="TEPS 387" />
+<meta name="apple-mobile-web-app-title" content="TEPS" />
 <link rel="manifest" href="manifest.json" />
 <link rel="apple-touch-icon" href="icons/icon-192.png" />
 <link rel="icon" type="image/png" href="icons/favicon.png" />
-<title>TEPS 387 단어장</title>
+<title>TEPS 387 · 단어첩</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,0..100,0..1;1,9..144,300..900,0..100,0..1&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+
 <style>
-  /* ─── HARNESS: Tokens ─────────────────────────────────────────── */
-  :root {
-    --amber-50:#fef9f3; --amber-100:#fef3c7; --amber-200:#fde68a;
-    --amber-500:#f59e0b; --amber-600:#d97706; --amber-700:#b45309; --amber-900:#78350f;
-    --ink:#1c1b18; --ink-2:#3f3a30; --muted:#8a847a;
-    --line:#e9e2d6; --card:#ffffff; --bg:#fef9f3;
-    --ok:#15803d; --bad:#b91c1c; --info:#0e7490;
-    --shadow:0 1px 2px rgba(0,0,0,0.04), 0 8px 24px rgba(120,53,15,0.06);
-    --radius:14px; --radius-sm:10px;
-    --safe-bottom: env(safe-area-inset-bottom, 0px);
-  }
-  @media (prefers-color-scheme: dark) {
-    :root.auto-dark {
-      --ink:#f5efe2; --ink-2:#cdc6b7; --muted:#9b9385;
-      --line:#3a342a; --card:#23201a; --bg:#1a1814; --amber-50:#23201a; --amber-100:#3a2f1a;
-      --shadow:0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.4);
-    }
-  }
+/* ════════════════════════════════════════════════════════════════
+   AESTHETIC: A vocabulary almanac. Editorial restraint.
+   Single accent (terracotta). Heavy on negative space and typography.
+   No emoji. Marginalia, § numerals, hanging quotes, small caps.
+   ════════════════════════════════════════════════════════════════ */
 
-  /* ─── HARNESS: Reset ─────────────────────────────────────────── */
-  *,*::before,*::after { box-sizing:border-box; }
-  html,body { margin:0; padding:0; background:var(--bg); color:var(--ink);
-    font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Segoe UI", Roboto, sans-serif;
-    -webkit-font-smoothing: antialiased; line-height:1.55; }
-  button { font: inherit; color:inherit; background:none; border:none; cursor:pointer; padding:0; }
-  input { font: inherit; }
-  ::-webkit-scrollbar { width:0; height:0; }
+:root {
+  color-scheme: light;
 
-  /* ─── HARNESS: Layout ─────────────────────────────────────────── */
-  .app { max-width: 720px; margin: 0 auto; min-height: 100dvh; display:flex; flex-direction:column; }
-  header.top {
-    position: sticky; top: 0; z-index: 10;
-    background: linear-gradient(180deg, var(--amber-700), var(--amber-600));
-    color: white; padding: env(safe-area-inset-top, 0px) 16px 12px;
-    box-shadow: 0 4px 18px rgba(120,53,15,0.18);
-  }
-  .top-row { display:flex; justify-content:space-between; align-items:center; padding-top:10px; }
-  .brand { display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:0.3px; }
-  .brand .logo { width:32px; height:32px; border-radius:8px; background:var(--amber-100); color:var(--amber-700);
-    display:grid; place-items:center; font-weight:900; font-size:14px; box-shadow: inset 0 0 0 2px rgba(255,255,255,0.4); }
-  .brand .title { font-size:18px; }
-  .brand .sub { font-size:11px; opacity:0.85; font-weight:500; margin-top:-2px; display:block; }
-  .top-meta { display:flex; gap:6px; align-items:center; font-size:12px; }
-  .pill { padding:5px 10px; background:rgba(255,255,255,0.15); border-radius:999px; font-weight:600; backdrop-filter:saturate(1.4); }
-  .pill.dday { background:var(--amber-100); color:var(--amber-700); }
-  .iconbtn { width:36px; height:36px; border-radius:50%; display:grid; place-items:center; background:rgba(255,255,255,0.15); }
-  .iconbtn:active { background:rgba(255,255,255,0.3); }
+  /* — PAPER & INK — */
+  --paper:        #f4f0e8;
+  --paper-deep:   #ebe5d6;
+  --paper-edge:   #d9d1bf;
+  --rule:         #2a2d3e1f;
+  --rule-strong:  #2a2d3e3a;
+  --ink:          #1a1d2e;
+  --ink-soft:     #2a2d3e;
+  --ink-faded:    #6f6960;
+  --ink-whisper:  #9a9385;
 
-  main { flex: 1; padding: 12px 14px 100px; }
+  /* — ACCENT (single, sparingly) — */
+  --terra:        #c4543a;
+  --terra-deep:   #9c3f2a;
+  --terra-wash:   #c4543a14;
 
-  /* ─── HARNESS: Bottom Nav ─────────────────────────────────────────── */
-  nav.bottom {
-    position: fixed; bottom: 0; left:0; right:0; z-index: 20;
-    background: rgba(255,255,255,0.92); backdrop-filter: blur(14px) saturate(1.6);
-    border-top: 1px solid var(--line);
-    padding: 6px 0 calc(6px + var(--safe-bottom));
-    display: grid; grid-template-columns: repeat(5, 1fr);
-  }
-  nav.bottom button {
-    display:flex; flex-direction:column; align-items:center; gap:2px; padding:8px 4px;
-    color: var(--muted); font-size:11px; font-weight:600; transition: color .15s;
-  }
-  nav.bottom button .nav-icon { font-size:20px; line-height:1; }
-  nav.bottom button.active { color: var(--amber-700); }
-  nav.bottom button.active .nav-icon { transform: scale(1.1); }
-  @media (prefers-color-scheme: dark) {
-    nav.bottom { background: rgba(35,32,26,0.92); }
-  }
+  /* — STATE — */
+  --right:        #3a6b4e;
+  --right-wash:   #3a6b4e14;
+  --wrong:        #a83c2c;
+  --wrong-wash:   #a83c2c14;
+  --teal:         #2f5d61;
+  --teal-wash:    #2f5d6114;
 
-  /* ─── HARNESS: Day pills ─────────────────────────────────────────── */
-  .day-strip { display:flex; gap:8px; overflow-x:auto; padding:4px 2px 8px; margin: -4px -4px 8px; scroll-snap-type:x mandatory; }
-  .day-strip > .chip { scroll-snap-align:start; }
-  .chip {
-    flex: 0 0 auto; padding: 8px 14px; border-radius:999px; background:var(--card);
-    border: 1px solid var(--line); font-weight:700; font-size:13px; color:var(--ink-2);
-    box-shadow: var(--shadow);
-  }
-  .chip.active { background: var(--amber-700); color:#fff; border-color: var(--amber-700); }
-  .chip.listening { background:#cffafe; color:var(--info); border-color:#67e8f9; }
-  .chip.listening.active { background:var(--info); color:#fff; }
-  .chip.all { background:var(--amber-100); color:var(--amber-900); border-color:var(--amber-200); }
-  .chip.all.active { background:var(--amber-900); color:#fff; }
+  /* — TYPE — */
+  --display: "Fraunces", "Source Serif Pro", Georgia, "Apple SD Gothic Neo", serif;
+  --body:    "Pretendard", "Fraunces", -apple-system, BlinkMacSystemFont, sans-serif;
+  --mono:    "IBM Plex Mono", "SF Mono", "Menlo", monospace;
 
-  /* ─── HARNESS: Word card ─────────────────────────────────────────── */
-  .word-list { display:flex; flex-direction:column; gap:10px; }
-  .word-card {
-    background:var(--card); border-radius:var(--radius); padding:14px 16px;
-    box-shadow: var(--shadow); border:1px solid var(--line);
-  }
-  .word-card .row1 { display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; }
-  .word-card .w { font-size:20px; font-weight:800; color:var(--ink); letter-spacing:-0.2px; }
-  .word-card .ipa { font-family: Georgia, serif; color:var(--muted); font-size:14px; }
-  .word-card .pos { font-size:11px; padding:2px 7px; background:var(--amber-100); color:var(--amber-700); border-radius:6px; font-weight:700; }
-  .word-card .ko { color:var(--ink); font-size:15px; margin: 6px 0 4px; }
-  .word-card .syn { color:var(--muted); font-size:13px; font-style:italic; }
-  .word-card .ex { color:var(--ink-2); font-size:14px; margin-top:8px; padding:8px 10px; background:var(--amber-50); border-left:3px solid var(--amber-500); border-radius:var(--radius-sm); }
-  .word-card .exko { color:var(--muted); font-size:13px; margin-top:3px; }
-  .word-card .note { color:var(--info); font-size:12px; margin-top:6px; padding:6px 8px; background:#ecfeff; border-radius:8px; font-weight:600; }
-  @media (prefers-color-scheme: dark) {
-    .word-card .note { background:#0a3540; color:#67e8f9; }
-  }
-  .word-card .actions { display:flex; gap:6px; margin-top:10px; }
-  .tts-btn {
-    padding: 6px 10px; border-radius: 8px; background:var(--amber-100); color:var(--amber-700);
-    font-weight:700; font-size:13px; display:inline-flex; align-items:center; gap:4px;
-  }
-  .tts-btn:active { transform: scale(0.96); }
-  .tts-btn.slow { background: #dbeafe; color:#1e40af; }
-  .star {
-    margin-left:auto; padding:6px 10px; border-radius:8px; color:var(--muted); font-size:18px;
-  }
-  .star.on { color: var(--amber-500); }
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-t: env(safe-area-inset-top, 0px);
+}
 
-  /* ─── HARNESS: Search & Stats Header ─────────────────────────────────────────── */
-  .search {
-    width:100%; padding: 11px 14px; border-radius:10px; background:var(--card); border:1px solid var(--line);
-    color:var(--ink); box-shadow:var(--shadow); margin-bottom:10px;
-  }
-  .progress-bar { height:6px; background:var(--line); border-radius:99px; overflow:hidden; margin-top:6px; }
-  .progress-bar > div { height:100%; background: linear-gradient(90deg, var(--amber-600), var(--amber-500)); transition: width .3s; }
+/* — Reset — */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+html { background: var(--paper); }
+body {
+  font-family: var(--body);
+  color: var(--ink);
+  background: var(--paper);
+  font-size: 15px;
+  line-height: 1.55;
+  letter-spacing: 0.005em;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; padding: 0; text-align: inherit; }
+input, select { font: inherit; color: inherit; }
+::selection { background: var(--ink); color: var(--paper); }
+::-webkit-scrollbar { width: 0; height: 0; }
+hr { border: none; height: 1px; background: var(--rule); margin: 24px 0; }
 
-  /* ─── HARNESS: Flashcard ─────────────────────────────────────────── */
-  .flash-stage { padding: 8px 0 4px; }
-  .flash-card {
-    background: linear-gradient(180deg, var(--card), var(--amber-50));
-    border-radius: 20px; min-height: 380px;
-    padding: 28px 24px; box-shadow: var(--shadow);
-    border:1px solid var(--line); position:relative;
-    display:flex; flex-direction:column; justify-content:center; align-items:center; gap:14px; text-align:center;
-    transition: transform .35s cubic-bezier(.2,.8,.2,1), opacity .25s;
-  }
-  .flash-card.swipe-left { transform: translateX(-120%) rotate(-6deg); opacity:0; }
-  .flash-card.swipe-right { transform: translateX(120%) rotate(6deg); opacity:0; }
-  .flash-w { font-size: 36px; font-weight: 900; letter-spacing:-0.5px; color:var(--ink); }
-  .flash-ipa { font-family: Georgia, serif; color: var(--muted); font-size:18px; }
-  .flash-pos { font-size:12px; padding:3px 9px; background:var(--amber-100); color:var(--amber-700); border-radius:7px; font-weight:700; }
-  .flash-hint { color:var(--muted); font-size:13px; margin-top:14px; }
-  .flash-back { display:none; }
-  .flash-card.flipped .flash-front { display:none; }
-  .flash-card.flipped .flash-back { display:flex; flex-direction:column; gap:10px; }
-  .flash-back .ko { font-size:24px; font-weight:800; color: var(--amber-700); }
-  .flash-back .syn { color:var(--muted); font-style:italic; font-size:15px; }
-  .flash-back .ex { color:var(--ink-2); font-size:15px; padding:10px 14px; background: var(--amber-50); border-radius:10px; border-left:3px solid var(--amber-500); margin-top:8px; }
-  .flash-back .exko { color:var(--muted); font-size:14px; }
+/* — Paper texture: subtle noise via background — */
+body::before {
+  content: "";
+  position: fixed; inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(180,150,110,.05) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(180,150,110,.04) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+.app, header, nav, main, footer { position: relative; z-index: 1; }
 
-  .flash-controls { display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-top:14px; }
-  .btn { padding: 14px; border-radius: 12px; font-weight:700; font-size:15px; }
-  .btn-bad { background:#fee2e2; color:var(--bad); }
-  .btn-ok { background:#dcfce7; color:var(--ok); }
-  .btn-primary { background: var(--amber-700); color:#fff; }
-  .btn-ghost { background:var(--card); color:var(--ink-2); border:1px solid var(--line); }
-  .btn-primary:active, .btn-ghost:active { transform: scale(0.98); }
+/* ════════════════════════════════════════════════════════════════
+   SHELL
+   ════════════════════════════════════════════════════════════════ */
+.app {
+  max-width: 720px;
+  margin: 0 auto;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  padding: 0 24px;
+}
+@media (max-width: 480px) { .app { padding: 0 20px; } }
 
-  .flash-meta { display:flex; justify-content:space-between; align-items:center; padding: 6px 4px; color:var(--muted); font-size:13px; font-weight:600; }
-  .flash-meta .progress-bar { flex:1; margin: 0 12px; }
+/* — Top masthead (newspaper-style) — */
+.masthead {
+  padding: calc(var(--safe-t) + 28px) 0 18px;
+  border-bottom: 1px solid var(--rule);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+}
+.masthead .title-block { display: flex; flex-direction: column; gap: 2px; }
+.masthead h1 {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: 26px;
+  letter-spacing: -0.018em;
+  font-variation-settings: "opsz" 36, "SOFT" 30;
+  line-height: 1;
+}
+.masthead h1 .accent { color: var(--terra); font-style: italic; font-variation-settings: "opsz" 144, "SOFT" 100, "WONK" 1; }
+.masthead .sub {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--ink-faded);
+  margin-top: 4px;
+}
+.masthead .countdown {
+  text-align: right;
+  font-family: var(--display);
+  font-variation-settings: "opsz" 144;
+}
+.masthead .countdown .num {
+  font-size: 30px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  font-variation-settings: "opsz" 144, "wght" 500;
+  line-height: 1;
+  display: block;
+}
+.masthead .countdown .label {
+  font-family: var(--mono);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--ink-faded);
+  margin-top: 5px;
+  display: block;
+}
 
-  .flash-tts { position:absolute; top:14px; right:14px; display:flex; gap:6px; }
+main {
+  flex: 1;
+  padding: 24px 0 calc(120px + var(--safe-b));
+}
 
-  /* ─── HARNESS: Quiz ─────────────────────────────────────────── */
-  .quiz-setup { display:flex; flex-direction:column; gap:12px; padding:6px 0; }
-  .quiz-setup label { font-size:13px; color:var(--muted); font-weight:700; }
-  .quiz-mode { display:grid; grid-template-columns: 1fr 1fr; gap:8px; }
-  .quiz-mode .chip { text-align:center; padding:14px; }
-  .quiz-q {
-    background:var(--card); padding: 20px 18px; border-radius:var(--radius); box-shadow:var(--shadow); border:1px solid var(--line);
-    text-align:center; margin-bottom:14px;
-  }
-  .quiz-q .label { font-size:11px; color:var(--muted); font-weight:700; text-transform:uppercase; letter-spacing:1px; }
-  .quiz-q .prompt { font-size:28px; font-weight:800; margin: 10px 0 6px; color:var(--ink); }
-  .quiz-q .ipa { color:var(--muted); font-family:Georgia,serif; font-size:14px; }
-  .quiz-choices { display:flex; flex-direction:column; gap:8px; }
-  .quiz-choice {
-    text-align:left; padding: 14px 16px; border-radius: 12px; background:var(--card);
-    border:1px solid var(--line); font-weight:600; color:var(--ink); box-shadow:var(--shadow);
-    display:flex; align-items:center; gap:10px;
-  }
-  .quiz-choice .num { width:24px; height:24px; border-radius:6px; background:var(--amber-100); color:var(--amber-700); display:grid; place-items:center; font-weight:800; font-size:13px; }
-  .quiz-choice.right { background:#dcfce7; border-color:#86efac; color:var(--ok); }
-  .quiz-choice.right .num { background:var(--ok); color:#fff; }
-  .quiz-choice.wrong { background:#fee2e2; border-color:#fca5a5; color:var(--bad); }
-  .quiz-choice.wrong .num { background:var(--bad); color:#fff; }
-  .quiz-choice:disabled { cursor:default; }
-  .quiz-bar { display:flex; justify-content:space-between; align-items:center; padding: 4px 4px 10px; color:var(--muted); font-size:13px; font-weight:700; }
-  .quiz-result { text-align:center; padding: 20px; background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); }
-  .quiz-result h2 { margin: 0 0 8px; font-size:32px; color:var(--amber-700); }
-  .quiz-result .score { font-size:18px; color:var(--ink-2); margin-bottom:14px; }
-  .quiz-result .wrong-list { text-align:left; margin-top:14px; }
-  .quiz-result .wrong-list h3 { font-size:14px; color:var(--bad); margin: 0 0 6px; }
-  .quiz-result .wrong-list .word-card { margin-bottom:6px; }
+/* ════════════════════════════════════════════════════════════════
+   NAV (bottom, text-only, underline indicator)
+   ════════════════════════════════════════════════════════════════ */
+nav.bottom {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  z-index: 30;
+  background: var(--paper);
+  border-top: 1px solid var(--rule-strong);
+  padding: 14px 0 calc(14px + var(--safe-b));
+  backdrop-filter: blur(8px);
+}
+nav.bottom::before {
+  content: "";
+  position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--ink) 50%, transparent);
+  opacity: 0.06;
+}
+nav.bottom .nav-inner {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+}
+@media (max-width: 480px) { nav.bottom .nav-inner { padding: 0 20px; } }
 
-  /* ─── HARNESS: SRS ─────────────────────────────────────────── */
-  .srs-overview { display:grid; grid-template-columns: repeat(5, 1fr); gap:8px; margin-bottom:14px; }
-  .srs-box {
-    text-align:center; padding: 12px 6px; border-radius:var(--radius-sm); background:var(--card); border:1px solid var(--line); box-shadow:var(--shadow);
-  }
-  .srs-box .label { font-size:10px; color:var(--muted); font-weight:700; letter-spacing:0.5px; }
-  .srs-box .count { font-size:22px; font-weight:800; color:var(--amber-700); margin-top:4px; }
-  .srs-box .interval { font-size:10px; color:var(--muted); margin-top:2px; }
-  .srs-banner {
-    background: linear-gradient(135deg, var(--amber-700), var(--amber-600));
-    color:#fff; padding:18px; border-radius:var(--radius); margin-bottom:12px;
-    display:flex; justify-content:space-between; align-items:center;
-  }
-  .srs-banner .due { font-size:13px; opacity:0.9; font-weight:600; }
-  .srs-banner .count { font-size:36px; font-weight:900; margin-top:2px; }
-  .srs-banner button { padding:10px 18px; background:#fff; color:var(--amber-700); border-radius:10px; font-weight:800; font-size:14px; }
-  .srs-banner button:active { transform: scale(0.96); }
+nav.bottom button {
+  font-family: var(--display);
+  font-size: 14px;
+  letter-spacing: 0.01em;
+  color: var(--ink-faded);
+  padding: 4px 0;
+  position: relative;
+  font-weight: 400;
+  font-variation-settings: "opsz" 36;
+  transition: color .25s;
+  text-align: center;
+}
+nav.bottom button .ko {
+  font-family: var(--body);
+  font-size: 11.5px;
+  letter-spacing: 0.04em;
+  display: block;
+  margin-top: 2px;
+  color: var(--ink-whisper);
+  transition: color .25s;
+}
+nav.bottom button.active {
+  color: var(--terra);
+  font-style: italic;
+  font-variation-settings: "opsz" 144, "WONK" 1;
+}
+nav.bottom button.active .ko { color: var(--terra); font-style: normal; }
+nav.bottom button.active::after {
+  content: "";
+  position: absolute;
+  bottom: -14px; left: 50%;
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--terra);
+  transform: translateX(-50%);
+}
 
-  /* ─── HARNESS: Stats ─────────────────────────────────────────── */
-  .stat-grid { display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:12px; }
-  .stat-card { background:var(--card); padding:14px; border-radius:var(--radius); box-shadow:var(--shadow); border:1px solid var(--line); }
-  .stat-card .label { font-size:11px; color:var(--muted); font-weight:700; text-transform:uppercase; letter-spacing:0.5px; }
-  .stat-card .val { font-size:26px; font-weight:800; color:var(--amber-700); margin-top:4px; }
-  .stat-card .sub { font-size:12px; color:var(--muted); margin-top:2px; }
-  .day-stats { background:var(--card); padding:14px 16px; border-radius:var(--radius); box-shadow:var(--shadow); border:1px solid var(--line); }
-  .day-stats h3 { margin: 0 0 10px; font-size:14px; color:var(--ink-2); }
-  .day-stats .row { display:flex; align-items:center; gap:10px; padding: 6px 0; border-bottom:1px solid var(--line); }
-  .day-stats .row:last-child { border-bottom:none; }
-  .day-stats .row .name { width:80px; font-size:13px; font-weight:700; color:var(--ink-2); }
-  .day-stats .row .bar { flex:1; }
-  .day-stats .row .pct { font-size:12px; color:var(--muted); width:46px; text-align:right; }
+/* ════════════════════════════════════════════════════════════════
+   SECTION HEADERS  (chapter-style)
+   ════════════════════════════════════════════════════════════════ */
+.chapter {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 18px;
+  margin-bottom: 22px;
+}
+.chapter .label {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.24em;
+  color: var(--ink-faded);
+  margin-bottom: 6px;
+}
+.chapter h2 {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 34px;
+  letter-spacing: -0.022em;
+  line-height: 1;
+  font-variation-settings: "opsz" 144, "SOFT" 50;
+  color: var(--ink);
+}
+.chapter h2 em {
+  font-style: italic;
+  font-variation-settings: "opsz" 144, "WONK" 1, "SOFT" 100;
+  color: var(--terra);
+  font-weight: 400;
+}
+.chapter .meta {
+  font-family: var(--mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--ink-faded);
+  text-align: right;
+  line-height: 1.6;
+}
 
-  /* ─── HARNESS: Empty/error states ─────────────────────────────────────────── */
-  .empty { text-align:center; padding: 50px 20px; color:var(--muted); }
-  .empty .icon { font-size:48px; margin-bottom:8px; opacity:0.5; }
+/* ════════════════════════════════════════════════════════════════
+   DAY FILTER STRIP  (typographic chips)
+   ════════════════════════════════════════════════════════════════ */
+.filter-strip {
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  padding: 0 0 16px;
+  margin: -4px -24px 16px;
+  padding-left: 24px;
+  padding-right: 24px;
+  border-bottom: 1px solid var(--rule);
+}
+.filter-strip > .chip {
+  flex: 0 0 auto;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 6px 14px 6px 0;
+  margin-right: 4px;
+  color: var(--ink-whisper);
+  position: relative;
+  white-space: nowrap;
+  transition: color .2s;
+}
+.filter-strip > .chip + .chip { padding-left: 14px; border-left: 1px solid var(--rule); }
+.filter-strip > .chip.active { color: var(--terra); }
+.filter-strip > .chip.active::after {
+  content: "";
+  position: absolute;
+  bottom: -1px; left: 14px; right: 0;
+  height: 2px;
+  background: var(--terra);
+}
+.filter-strip > .chip:first-child.active::after { left: 0; }
 
-  .loader { text-align:center; padding: 60px 20px; color:var(--muted); }
-  .toast {
-    position: fixed; bottom: calc(80px + var(--safe-bottom)); left: 50%; transform: translateX(-50%);
-    background: rgba(28,27,24,0.92); color:#fff; padding: 10px 18px; border-radius:24px;
-    font-size:13px; font-weight:600; z-index:100; pointer-events:none;
-    opacity:0; transition: opacity .25s;
-  }
-  .toast.show { opacity: 1; }
+/* ════════════════════════════════════════════════════════════════
+   ENTRY (word card) — the heart of the design
+   ════════════════════════════════════════════════════════════════ */
+.entry {
+  display: grid;
+  grid-template-columns: 38px 1fr;
+  gap: 16px;
+  padding: 24px 0 26px;
+  border-bottom: 1px solid var(--rule);
+  position: relative;
+}
+.entry:first-child { padding-top: 8px; }
+.entry .marker {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  color: var(--ink-whisper);
+  padding-top: 12px;
+}
+.entry .marker .num {
+  display: block;
+  font-family: var(--display);
+  font-size: 18px;
+  font-style: italic;
+  font-weight: 400;
+  color: var(--ink-faded);
+  letter-spacing: -0.01em;
+  line-height: 1;
+  font-variation-settings: "opsz" 144, "WONK" 1;
+  margin-top: 4px;
+}
+.entry .body {
+  min-width: 0;
+}
+.entry .word-row {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 12px 14px;
+  margin-bottom: 8px;
+}
+.entry .word {
+  font-family: var(--display);
+  font-size: 30px;
+  font-weight: 500;
+  letter-spacing: -0.022em;
+  line-height: 1.05;
+  font-variation-settings: "opsz" 144, "SOFT" 30;
+  color: var(--ink);
+}
+.entry .ipa {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--ink-faded);
+  letter-spacing: -0.01em;
+}
+.entry .pos {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--terra);
+  padding-top: 4px;
+}
+.entry .ko {
+  font-family: var(--body);
+  font-size: 16px;
+  color: var(--ink);
+  margin: 2px 0 12px;
+  letter-spacing: -0.005em;
+}
+.entry .syn {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--ink-faded);
+  margin-bottom: 16px;
+  font-variation-settings: "opsz" 36, "WONK" 1;
+}
+.entry .syn::before { content: "≈ "; color: var(--ink-whisper); font-style: normal; margin-right: 4px; }
+.entry .syn span + span::before { content: "  ·  "; color: var(--ink-whisper); margin: 0 2px; }
+.entry .ex {
+  font-family: var(--display);
+  font-size: 16px;
+  font-style: italic;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  font-variation-settings: "opsz" 36, "WONK" 1, "SOFT" 50;
+  position: relative;
+  padding-left: 18px;
+  margin-bottom: 6px;
+}
+.entry .ex::before {
+  content: "❝";
+  position: absolute;
+  left: -2px; top: -8px;
+  font-family: var(--display);
+  font-style: normal;
+  font-size: 32px;
+  color: var(--terra);
+  font-variation-settings: "opsz" 144, "wght" 500;
+  line-height: 1;
+}
+.entry .exko {
+  font-family: var(--body);
+  font-size: 13.5px;
+  color: var(--ink-faded);
+  padding-left: 18px;
+  letter-spacing: -0.003em;
+}
+.entry .note {
+  font-family: var(--body);
+  font-size: 12.5px;
+  color: var(--teal);
+  margin-top: 10px;
+  padding: 9px 12px;
+  background: var(--teal-wash);
+  border-left: 2px solid var(--teal);
+  letter-spacing: -0.003em;
+}
+.entry .actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 16px;
+}
+.entry .actions button {
+  padding: 6px 10px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+  border-radius: 0;
+  border: 1px solid var(--rule);
+  transition: all .15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.entry .actions button svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 1.5; }
+.entry .actions button:hover { color: var(--ink); border-color: var(--ink); }
+.entry .actions button.starred { color: var(--terra); border-color: var(--terra); }
+.entry .actions button.starred svg { fill: var(--terra); stroke: var(--terra); }
+.entry .actions .spacer { flex: 1; }
+.entry .actions .star { margin-left: auto; }
+
+/* ════════════════════════════════════════════════════════════════
+   SEARCH
+   ════════════════════════════════════════════════════════════════ */
+.search {
+  position: relative;
+  margin-bottom: 18px;
+}
+.search input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--ink);
+  padding: 8px 0 8px 26px;
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 17px;
+  color: var(--ink);
+  letter-spacing: -0.005em;
+  font-variation-settings: "opsz" 36;
+}
+.search input:focus { outline: none; border-color: var(--terra); }
+.search input::placeholder { color: var(--ink-whisper); font-style: italic; }
+.search .icon {
+  position: absolute;
+  left: 0; top: 12px;
+  width: 16px; height: 16px;
+  stroke: var(--ink-faded);
+  fill: none;
+  stroke-width: 1.5;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   FLASHCARD
+   ════════════════════════════════════════════════════════════════ */
+.flash-meta {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+  margin-bottom: 16px;
+}
+.flash-meta .bar {
+  height: 1px;
+  background: var(--rule);
+  position: relative;
+}
+.flash-meta .bar > div {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: var(--terra);
+  transition: width .35s cubic-bezier(.2,.8,.2,1);
+}
+
+.flash-stage {
+  background: var(--paper-deep);
+  padding: 36px 28px;
+  position: relative;
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+  margin: 0 -8px;
+  min-height: 420px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: opacity .25s;
+}
+.flash-stage::before {
+  content: "";
+  position: absolute;
+  top: 8px; right: 8px; bottom: 8px; left: 8px;
+  border-top: 1px solid var(--rule-strong);
+  border-bottom: 1px solid var(--rule-strong);
+  pointer-events: none;
+}
+.flash-stage.fading { opacity: 0; }
+.flash-stage .tts {
+  position: absolute;
+  top: 16px; right: 16px;
+  display: flex; gap: 2px;
+  z-index: 2;
+}
+.flash-stage .tts button {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  display: grid; place-items: center;
+  color: var(--ink-faded);
+  transition: color .15s, background .15s;
+}
+.flash-stage .tts button:hover { color: var(--ink); background: var(--paper); }
+.flash-stage .tts button svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.5; }
+
+.flash-front, .flash-back { text-align: center; }
+.flash-pos {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.24em;
+  color: var(--terra);
+  margin-bottom: 18px;
+}
+.flash-word {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 48px;
+  letter-spacing: -0.026em;
+  line-height: 1.05;
+  font-variation-settings: "opsz" 144, "SOFT" 30;
+  color: var(--ink);
+  margin-bottom: 14px;
+}
+.flash-ipa {
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--ink-faded);
+  letter-spacing: -0.005em;
+  margin-bottom: 32px;
+}
+.flash-hint {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 13px;
+  color: var(--ink-whisper);
+  font-variation-settings: "opsz" 36, "WONK" 1;
+  margin-top: 8px;
+}
+.flash-back .ko {
+  font-family: var(--display);
+  font-size: 32px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  font-variation-settings: "opsz" 144, "wght" 500;
+  color: var(--terra);
+  margin-bottom: 14px;
+  line-height: 1.15;
+}
+.flash-back .syn {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 14px;
+  color: var(--ink-faded);
+  margin-bottom: 18px;
+  font-variation-settings: "opsz" 36, "WONK" 1;
+}
+.flash-back .syn::before { content: "≈ "; color: var(--ink-whisper); font-style: normal; }
+.flash-back .ex {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.5;
+  color: var(--ink);
+  font-variation-settings: "opsz" 36, "WONK" 1;
+  margin-bottom: 8px;
+  max-width: 420px;
+  margin-left: auto; margin-right: auto;
+  position: relative;
+}
+.flash-back .ex::before {
+  content: "❝";
+  font-family: var(--display);
+  color: var(--terra);
+  font-style: normal;
+  font-size: 28px;
+  margin-right: 2px;
+  font-variation-settings: "opsz" 144, "wght" 500;
+}
+.flash-back .exko {
+  font-family: var(--body);
+  font-size: 13px;
+  color: var(--ink-faded);
+  max-width: 380px;
+  margin: 0 auto;
+}
+
+.flash-controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  margin-top: 20px;
+  border: 1px solid var(--ink);
+  border-radius: 0;
+}
+.flash-controls button {
+  padding: 16px 0;
+  font-family: var(--display);
+  font-size: 16px;
+  font-style: italic;
+  letter-spacing: 0.005em;
+  font-variation-settings: "opsz" 36, "WONK" 1;
+  color: var(--ink);
+  transition: background .2s, color .2s;
+}
+.flash-controls button + button { border-left: 1px solid var(--ink); }
+.flash-controls button.bad:hover { background: var(--wrong); color: var(--paper); }
+.flash-controls button.ok:hover { background: var(--right); color: var(--paper); }
+.flash-controls button.primary { background: var(--ink); color: var(--paper); }
+.flash-controls button.primary:hover { background: var(--terra); }
+.flash-controls button.ghost { color: var(--ink-faded); }
+.flash-controls button.ghost:hover { color: var(--ink); }
+
+/* ════════════════════════════════════════════════════════════════
+   QUIZ (Examen)
+   ════════════════════════════════════════════════════════════════ */
+.quiz-section { margin-bottom: 24px; }
+.quiz-section .label {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.24em;
+  color: var(--ink-faded);
+  margin-bottom: 10px;
+}
+.quiz-modes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid var(--ink);
+}
+.quiz-modes button {
+  padding: 14px 12px;
+  font-family: var(--display);
+  font-size: 14px;
+  letter-spacing: -0.005em;
+  color: var(--ink-faded);
+  font-variation-settings: "opsz" 36;
+  transition: all .2s;
+  position: relative;
+}
+.quiz-modes button:nth-child(2n) { border-left: 1px solid var(--ink); }
+.quiz-modes button:nth-child(n+3) { border-top: 1px solid var(--ink); }
+.quiz-modes button.active {
+  background: var(--ink);
+  color: var(--paper);
+  font-style: italic;
+  font-variation-settings: "opsz" 36, "WONK" 1;
+}
+.quiz-modes button .ko {
+  display: block;
+  font-family: var(--body);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  color: inherit;
+  opacity: 0.7;
+  margin-top: 2px;
+  font-style: normal;
+}
+
+.range-pills {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.range-pills button {
+  padding: 7px 14px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+  border: 1px solid var(--rule-strong);
+  transition: all .15s;
+}
+.range-pills button.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.range-pills button:hover:not(.active) { border-color: var(--ink); color: var(--ink); }
+
+.quiz-start {
+  display: block;
+  width: 100%;
+  margin-top: 28px;
+  padding: 18px 0;
+  background: var(--terra);
+  color: var(--paper);
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 20px;
+  letter-spacing: -0.005em;
+  font-variation-settings: "opsz" 144, "WONK" 1;
+  transition: background .2s;
+}
+.quiz-start:hover { background: var(--terra-deep); }
+
+.quiz-q {
+  text-align: center;
+  padding: 32px 0 24px;
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 24px;
+}
+.quiz-q .stem-label {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.24em;
+  color: var(--ink-faded);
+  margin-bottom: 16px;
+}
+.quiz-q .stem {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 38px;
+  letter-spacing: -0.024em;
+  font-variation-settings: "opsz" 144, "SOFT" 30;
+  color: var(--ink);
+  line-height: 1.1;
+  margin-bottom: 8px;
+}
+.quiz-q .stem.ko { font-style: italic; font-variation-settings: "opsz" 144, "WONK" 1; color: var(--terra); }
+.quiz-q .stem-ipa {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--ink-faded);
+  letter-spacing: -0.005em;
+}
+.quiz-q .audio-btn {
+  margin-top: 14px;
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  border: 1px solid var(--ink);
+  display: inline-grid; place-items: center;
+  color: var(--ink);
+  transition: all .2s;
+}
+.quiz-q .audio-btn:hover { background: var(--ink); color: var(--paper); }
+.quiz-q .audio-btn svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.5; }
+
+.quiz-choices { display: flex; flex-direction: column; gap: 1px; background: var(--rule); margin-bottom: 24px; }
+.quiz-choice {
+  background: var(--paper);
+  padding: 18px 20px;
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  gap: 14px;
+  align-items: center;
+  font-family: var(--display);
+  font-size: 18px;
+  letter-spacing: -0.005em;
+  color: var(--ink);
+  font-variation-settings: "opsz" 36;
+  transition: background .15s, color .15s;
+}
+.quiz-choice .letter {
+  font-family: var(--mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--ink-faded);
+}
+.quiz-choice:hover:not(:disabled) { background: var(--paper-deep); }
+.quiz-choice.right { background: var(--right-wash); color: var(--right); }
+.quiz-choice.right .letter { color: var(--right); }
+.quiz-choice.wrong { background: var(--wrong-wash); color: var(--wrong); text-decoration: line-through; }
+.quiz-choice.wrong .letter { color: var(--wrong); }
+
+.quiz-bar {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--ink-faded);
+  margin-bottom: 16px;
+}
+
+.quiz-result {
+  text-align: center;
+  padding: 36px 20px 28px;
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+  margin-bottom: 28px;
+}
+.quiz-result .verdict {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 14px;
+  letter-spacing: 0.005em;
+  color: var(--terra);
+  font-variation-settings: "opsz" 36, "WONK" 1;
+  margin-bottom: 8px;
+}
+.quiz-result .score {
+  font-family: var(--display);
+  font-size: 80px;
+  font-weight: 400;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: var(--ink);
+  font-variation-settings: "opsz" 144, "SOFT" 30;
+  margin-bottom: 4px;
+}
+.quiz-result .score sup {
+  font-size: 28px;
+  font-style: italic;
+  color: var(--terra);
+  vertical-align: top;
+  position: relative; top: 8px;
+  font-variation-settings: "opsz" 144, "WONK" 1;
+}
+.quiz-result .fraction {
+  font-family: var(--mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--ink-faded);
+}
+.quiz-result .actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  margin-top: 28px;
+  border: 1px solid var(--ink);
+}
+.quiz-result .actions button {
+  padding: 14px 0;
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 15px;
+  font-variation-settings: "opsz" 36, "WONK" 1;
+  transition: background .15s, color .15s;
+}
+.quiz-result .actions button + button { border-left: 1px solid var(--ink); background: var(--ink); color: var(--paper); }
+.quiz-result .actions button:first-child:hover { background: var(--paper-deep); }
+.quiz-result .actions button + button:hover { background: var(--terra); }
+
+.wrong-list {
+  margin-top: 32px;
+  padding-top: 20px;
+  border-top: 1px solid var(--rule);
+}
+.wrong-list h3 {
+  font-family: var(--mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: var(--wrong);
+  font-weight: 500;
+  margin: 0 0 16px;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   SRS (Ledger)
+   ════════════════════════════════════════════════════════════════ */
+.srs-due {
+  border: 1px solid var(--ink);
+  padding: 22px 24px;
+  margin-bottom: 26px;
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 20px;
+}
+.srs-due::before {
+  content: "";
+  position: absolute;
+  top: 6px; left: 6px; right: 6px; bottom: 6px;
+  border: 1px solid var(--ink);
+  pointer-events: none;
+}
+.srs-due .label {
+  font-family: var(--mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: var(--ink-faded);
+  margin-bottom: 4px;
+}
+.srs-due .num {
+  font-family: var(--display);
+  font-size: 56px;
+  font-weight: 400;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  font-variation-settings: "opsz" 144, "SOFT" 30;
+  color: var(--ink);
+}
+.srs-due .unit {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 18px;
+  color: var(--terra);
+  margin-left: 4px;
+  font-variation-settings: "opsz" 144, "WONK" 1;
+}
+.srs-due button {
+  padding: 12px 18px;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 14px;
+  letter-spacing: 0.005em;
+  font-variation-settings: "opsz" 36, "WONK" 1;
+  transition: background .15s;
+}
+.srs-due button:hover { background: var(--terra); }
+
+.srs-boxes {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  border: 1px solid var(--ink);
+  margin-bottom: 24px;
+}
+.srs-box {
+  padding: 16px 8px;
+  text-align: center;
+  border-left: 1px solid var(--rule);
+}
+.srs-box:first-child { border-left: none; }
+.srs-box .roman {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 13px;
+  color: var(--ink-faded);
+  font-variation-settings: "opsz" 36, "WONK" 1;
+  margin-bottom: 4px;
+}
+.srs-box .count {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 26px;
+  font-variation-settings: "opsz" 144;
+  color: var(--ink);
+  line-height: 1;
+}
+.srs-box .interval {
+  font-family: var(--mono);
+  font-size: 8.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--ink-whisper);
+  margin-top: 6px;
+}
+
+.essay {
+  font-family: var(--display);
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--ink-faded);
+  font-variation-settings: "opsz" 36, "SOFT" 50;
+  letter-spacing: -0.003em;
+  margin-top: 24px;
+  padding: 18px 0;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+.essay h4 {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.24em;
+  color: var(--ink);
+  font-weight: 500;
+  margin: 0 0 10px;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   STATS (Index)
+   ════════════════════════════════════════════════════════════════ */
+.stat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  margin-bottom: 28px;
+  border: 1px solid var(--ink);
+}
+.stat-cell {
+  padding: 18px 18px;
+  border-left: 1px solid var(--rule);
+  border-top: 1px solid var(--rule);
+}
+.stat-cell:nth-child(2n+1) { border-left: none; }
+.stat-cell:nth-child(-n+2) { border-top: none; }
+.stat-cell .label {
+  font-family: var(--mono);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: var(--ink-faded);
+  margin-bottom: 8px;
+}
+.stat-cell .val {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 32px;
+  letter-spacing: -0.022em;
+  line-height: 1;
+  color: var(--ink);
+  font-variation-settings: "opsz" 144, "SOFT" 30;
+}
+.stat-cell .val em {
+  font-style: italic;
+  color: var(--terra);
+  font-variation-settings: "opsz" 144, "WONK" 1;
+}
+.stat-cell .sub {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 12px;
+  color: var(--ink-faded);
+  margin-top: 6px;
+  font-variation-settings: "opsz" 36, "WONK" 1;
+}
+
+.day-ledger { margin-bottom: 24px; }
+.day-ledger .title {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.24em;
+  color: var(--ink-faded);
+  margin-bottom: 10px;
+}
+.day-ledger .row {
+  display: grid;
+  grid-template-columns: 80px 1fr 60px;
+  gap: 12px;
+  align-items: center;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.day-ledger .row .name {
+  font-family: var(--display);
+  font-size: 14px;
+  letter-spacing: -0.005em;
+  color: var(--ink);
+}
+.day-ledger .row .name em {
+  font-style: italic;
+  color: var(--terra);
+  font-variation-settings: "opsz" 36, "WONK" 1;
+}
+.day-ledger .row .bar {
+  height: 1px;
+  background: var(--rule-strong);
+  position: relative;
+}
+.day-ledger .row .bar > div {
+  position: absolute; left: 0; top: -1px; bottom: -1px;
+  background: var(--terra);
+  transition: width .35s ease;
+}
+.day-ledger .row .frac {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  text-align: right;
+  color: var(--ink-faded);
+  letter-spacing: -0.005em;
+}
+
+.settings-block {
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid var(--rule);
+}
+.settings-block .title {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.24em;
+  color: var(--ink-faded);
+  margin-bottom: 12px;
+}
+.settings-block label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  font-family: var(--display);
+  font-size: 14px;
+  letter-spacing: -0.005em;
+  cursor: pointer;
+  color: var(--ink);
+}
+.settings-block label input { accent-color: var(--terra); }
+.settings-block button.danger {
+  display: block;
+  width: 100%;
+  margin-top: 12px;
+  padding: 12px 0;
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 13px;
+  color: var(--wrong);
+  border: 1px solid var(--wrong);
+  transition: all .15s;
+  font-variation-settings: "opsz" 36, "WONK" 1;
+}
+.settings-block button.danger:hover { background: var(--wrong); color: var(--paper); }
+
+/* ════════════════════════════════════════════════════════════════
+   STATES (empty / loading / toast)
+   ════════════════════════════════════════════════════════════════ */
+.empty, .loader {
+  padding: 80px 20px;
+  text-align: center;
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 17px;
+  color: var(--ink-faded);
+  font-variation-settings: "opsz" 36, "WONK" 1;
+  line-height: 1.4;
+}
+.empty small {
+  display: block;
+  margin-top: 8px;
+  font-family: var(--mono);
+  font-style: normal;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--ink-whisper);
+}
+
+.toast {
+  position: fixed;
+  bottom: calc(96px + var(--safe-b));
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--ink);
+  color: var(--paper);
+  padding: 9px 18px;
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 13px;
+  letter-spacing: -0.003em;
+  font-variation-settings: "opsz" 36, "WONK" 1;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .25s, transform .25s;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(-4px); }
+
+/* — small responsive — */
+@media (max-width: 360px) {
+  .masthead h1 { font-size: 22px; }
+  .masthead .countdown .num { font-size: 26px; }
+  .chapter h2 { font-size: 28px; }
+  .entry .word { font-size: 26px; }
+  .flash-word { font-size: 40px; }
+  .flash-back .ko { font-size: 28px; }
+  .quiz-q .stem { font-size: 30px; }
+}
+
+/* — Page entry animation — */
+@keyframes riseIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.tab-content > * { animation: riseIn .5s cubic-bezier(.2,.8,.2,1) backwards; }
+.tab-content > *:nth-child(1) { animation-delay: .02s; }
+.tab-content > *:nth-child(2) { animation-delay: .06s; }
+.tab-content > *:nth-child(3) { animation-delay: .10s; }
+.tab-content > *:nth-child(4) { animation-delay: .14s; }
+.tab-content > *:nth-child(5) { animation-delay: .18s; }
+
+/* ════════════════════════════════════════════════════════════════
+   ADD ENTRY — floating button + modal
+   ════════════════════════════════════════════════════════════════ */
+.fab {
+  position: fixed;
+  right: 20px; bottom: calc(86px + var(--safe-b));
+  z-index: 50;
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  background: var(--terra);
+  color: var(--paper);
+  display: grid; place-items: center;
+  border: 1px solid var(--terra-deep);
+  box-shadow: 0 8px 20px rgba(156,63,42,0.18), 0 2px 4px rgba(0,0,0,0.06);
+  transition: transform .15s, background .15s;
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 22px;
+  font-weight: 400;
+  font-variation-settings: "opsz" 144, "WONK" 1;
+  letter-spacing: 0;
+  line-height: 1;
+}
+.fab:hover { background: var(--terra-deep); transform: translateY(-1px); }
+.fab:active { transform: scale(0.95); }
+.fab svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.6; }
+
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(26,29,46,0.36);
+  backdrop-filter: blur(6px);
+  display: flex; align-items: flex-end; justify-content: center;
+  animation: fadeIn .25s ease;
+}
+.modal {
+  background: var(--paper);
+  width: 100%;
+  max-width: 720px;
+  max-height: 92dvh;
+  overflow-y: auto;
+  border-top: 1px solid var(--ink);
+  padding: 24px 24px calc(28px + var(--safe-b));
+  animation: slideUp .35s cubic-bezier(.2,.8,.2,1);
+  position: relative;
+}
+@media (min-width: 720px) {
+  .modal-overlay { align-items: center; padding: 24px; }
+  .modal { max-height: 86dvh; border: 1px solid var(--ink); border-top: 1px solid var(--ink); }
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+.modal-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-bottom: 18px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--rule);
+}
+.modal-head h3 {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 28px;
+  letter-spacing: -0.022em;
+  font-variation-settings: "opsz" 144, "SOFT" 30;
+}
+.modal-head h3 em {
+  font-style: italic;
+  color: var(--terra);
+  font-variation-settings: "opsz" 144, "WONK" 1;
+}
+.modal-head .label {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.24em;
+  color: var(--ink-faded);
+  margin-bottom: 6px;
+}
+.modal-close {
+  width: 36px; height: 36px;
+  display: grid; place-items: center;
+  color: var(--ink-faded);
+  font-family: var(--display);
+  font-size: 28px;
+  line-height: 1;
+  transition: color .15s;
+}
+.modal-close:hover { color: var(--ink); }
+
+.add-form { display: flex; flex-direction: column; gap: 16px; }
+.add-form label {
+  display: flex; flex-direction: column; gap: 5px;
+}
+.add-form label > span {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--ink-faded);
+}
+.add-form label > span em {
+  font-style: italic;
+  text-transform: none;
+  letter-spacing: -0.005em;
+  font-family: var(--display);
+  font-size: 11px;
+  color: var(--ink-whisper);
+  margin-left: 6px;
+  font-variation-settings: "opsz" 36, "WONK" 1;
+}
+.add-form input[type=text],
+.add-form textarea,
+.add-form select {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--ink);
+  padding: 7px 0 8px;
+  font-family: var(--display);
+  font-size: 17px;
+  color: var(--ink);
+  letter-spacing: -0.005em;
+  font-variation-settings: "opsz" 36;
+  resize: vertical;
+}
+.add-form input:focus, .add-form textarea:focus, .add-form select:focus {
+  outline: none; border-color: var(--terra);
+}
+.add-form input::placeholder, .add-form textarea::placeholder {
+  color: var(--ink-whisper); font-style: italic;
+  font-variation-settings: "opsz" 36, "WONK" 1;
+}
+.add-form .row-2 {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+}
+.add-form .pos-select {
+  font-family: var(--display);
+  font-size: 17px;
+}
+.modal-actions {
+  display: grid; grid-template-columns: auto 1fr; gap: 0;
+  margin-top: 18px;
+  border: 1px solid var(--ink);
+}
+.modal-actions button {
+  padding: 14px 18px;
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 15px;
+  font-variation-settings: "opsz" 36, "WONK" 1;
+  transition: background .15s, color .15s;
+}
+.modal-actions button[data-act=cancel] { color: var(--ink-faded); }
+.modal-actions button[data-act=cancel]:hover { background: var(--paper-deep); color: var(--ink); }
+.modal-actions button[type=submit] {
+  background: var(--terra);
+  color: var(--paper);
+  border-left: 1px solid var(--ink);
+}
+.modal-actions button[type=submit]:hover { background: var(--terra-deep); }
+
+/* — sync indicator — */
+.sync-state {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--ink-faded);
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-top: 6px;
+}
+.sync-state .dot {
+  display: inline-block;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--ink-whisper);
+}
+.sync-state.ok .dot { background: var(--right); }
+.sync-state.queued .dot { background: var(--terra); animation: pulse 1.5s ease infinite; }
+.sync-state.err .dot { background: var(--wrong); }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+/* — PAT setting — */
+.pat-setting {
+  border-top: 1px solid var(--rule);
+  margin-top: 18px;
+  padding-top: 18px;
+}
+.pat-setting .desc {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 13px;
+  color: var(--ink-faded);
+  margin: 6px 0 12px;
+  font-variation-settings: "opsz" 36, "WONK" 1;
+  line-height: 1.5;
+}
+.pat-setting input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--ink);
+  padding: 7px 0;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--ink);
+}
+.pat-setting input:focus { outline: none; border-color: var(--terra); }
+.pat-setting .pat-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin-top: 12px; border: 1px solid var(--ink); }
+.pat-setting .pat-buttons button {
+  padding: 10px 0;
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 13px;
+  font-variation-settings: "opsz" 36, "WONK" 1;
+}
+.pat-setting .pat-buttons button + button { border-left: 1px solid var(--ink); background: var(--ink); color: var(--paper); }
+.pat-setting .pat-buttons button + button:hover { background: var(--terra); }
+.pat-setting .pat-buttons button:first-child:hover { background: var(--paper-deep); }
 </style>
 </head>
 <body>
 
 <div class="app">
 
-  <!-- ─── HEADER ─────────────────────────────────────────── -->
-  <header class="top">
-    <div class="top-row">
-      <div class="brand">
-        <div class="logo">T</div>
-        <div>
-          <div class="title">TEPS 387</div>
-          <span class="sub">목표 387점 · 2급 · 매일 25단어</span>
-        </div>
-      </div>
-      <div class="top-meta">
-        <span class="pill dday" id="dday">D-?</span>
-      </div>
+  <!-- ═══ MASTHEAD ═══ -->
+  <header class="masthead">
+    <div class="title-block">
+      <h1>TEPS · <span class="accent">387</span></h1>
+      <span class="sub">A vocabulary almanac</span>
+    </div>
+    <div class="countdown">
+      <span class="num" id="dday">—</span>
+      <span class="label">DAYS REMAINING</span>
     </div>
   </header>
 
-  <!-- ─── MAIN ─────────────────────────────────────────── -->
+  <!-- ═══ MAIN ═══ -->
   <main id="main">
-    <div class="loader">단어 데이터 로딩 중...</div>
+    <div class="loader">단어첩을 펼치는 중&hellip;</div>
   </main>
 
-  <!-- ─── BOTTOM NAV ─────────────────────────────────────────── -->
+  <!-- ═══ BOTTOM NAV ═══ -->
   <nav class="bottom" id="nav">
-    <button data-tab="vocab" class="active"><span class="nav-icon">📖</span>단어장</button>
-    <button data-tab="flash"><span class="nav-icon">🃏</span>카드</button>
-    <button data-tab="quiz"><span class="nav-icon">❓</span>퀴즈</button>
-    <button data-tab="srs"><span class="nav-icon">🔄</span>SRS</button>
-    <button data-tab="stats"><span class="nav-icon">📊</span>통계</button>
+    <div class="nav-inner">
+      <button data-tab="vocab" class="active">Entries<span class="ko">단어</span></button>
+      <button data-tab="flash">Cards<span class="ko">카드</span></button>
+      <button data-tab="quiz">Examen<span class="ko">시험</span></button>
+      <button data-tab="srs">Ledger<span class="ko">장부</span></button>
+      <button data-tab="stats">Index<span class="ko">색인</span></button>
+    </div>
   </nav>
+
+  <!-- FAB: add entry -->
+  <button class="fab" id="fab" aria-label="add new entry" title="단어 추가">
+    <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+  </button>
 
   <div class="toast" id="toast"></div>
 </div>
 
 <script>
-/* ────────────────────────────────────────────────────────────────
-   HARNESS Architecture
-   - DATA layer  : VocabRepo (vocabulary.json fetch + memory)
-   - STATE layer : Store (localStorage-backed progress/SRS state)
-   - LOGIC layer : SRS, Quiz, TTS, Stats
-   - VIEW  layer : Tabs (vocab / flash / quiz / srs / stats)
-   - APP   shell : init, route
-   ──────────────────────────────────────────────────────────────── */
-
-/* ─── STORAGE ─────────────────────────────────────────── */
+/* ════════════════════════════════════════════════════════════════
+   STORE (localStorage)
+   ════════════════════════════════════════════════════════════════ */
 const Store = {
   _k: 'teps387.v1',
-  load() {
-    try { return JSON.parse(localStorage.getItem(this._k)) || this._default(); }
-    catch { return this._default(); }
-  },
+  _kc: 'teps387.custom',     // user-added entries
+  _kp: 'teps387.pat',        // GitHub PAT for cloud sync
+  _kq: 'teps387.syncQueue',  // pending custom days to push
+  load() { try { return JSON.parse(localStorage.getItem(this._k)) || this._d(); } catch { return this._d(); } },
   save(s) { localStorage.setItem(this._k, JSON.stringify(s)); },
-  _default() {
-    return {
-      progress: {},     // wordId -> { box:1-5, lastReviewed:ts, correct:n, total:n, lastResult: 'right'|'wrong' }
-      starred: {},      // wordId -> true
-      quizHistory: [],  // { date, mode, score, total, wrong:[wordId] }
-      streak: { last:null, days:0 },
-      settings: { autoTTS:false, ttsRate:0.95, slowRate:0.55 }
-    };
-  }
+  _d() { return {
+    progress: {}, starred: {}, quizHistory: [],
+    streak: { last: null, days: 0 },
+    settings: { autoTTS: false, ttsRate: 0.95, slowRate: 0.55 }
+  };},
+  loadCustom() { try { return JSON.parse(localStorage.getItem(this._kc)) || { days: [] }; } catch { return { days: [] }; } },
+  saveCustom(c) { localStorage.setItem(this._kc, JSON.stringify(c)); },
+  getPAT() { return localStorage.getItem(this._kp); },
+  setPAT(p) { if (p) localStorage.setItem(this._kp, p); else localStorage.removeItem(this._kp); },
+  setQueued(b) { localStorage.setItem(this._kq, b ? '1' : '0'); },
+  isQueued() { return localStorage.getItem(this._kq) === '1'; }
 };
 
-/* ─── SRS (Leitner) ─────────────────────────────────────────── */
-const SRS = {
-  intervals: [null, 1, 3, 7, 14, 30],   // days for boxes 1..5
-  labels: ['Box 1', 'Box 2', 'Box 3', 'Box 4', 'Box 5'],
-  intervalLabels: ['매일', '3일 후', '7일 후', '2주 후', '한 달 후'],
-
-  /** Process result: correct → next box, wrong → box 1 */
-  apply(state, wordId, correct) {
-    const p = state.progress[wordId] || { box:0, correct:0, total:0 };
-    p.total += 1;
-    if (correct) {
-      p.correct += 1;
-      p.box = Math.min(5, (p.box || 0) + 1);
-      p.lastResult = 'right';
-    } else {
-      p.box = 1;
-      p.lastResult = 'wrong';
+/* ════════════════════════════════════════════════════════════════
+   CLOUD SYNC — push custom.json to GitHub
+   ════════════════════════════════════════════════════════════════ */
+const CloudSync = {
+  REPO: 'ZeroxHenry/teps-387',
+  FILE: 'custom.json',
+  status: 'idle',  // idle | syncing | ok | err | offline
+  _listeners: [],
+  on(fn) { this._listeners.push(fn); },
+  _emit() { this._listeners.forEach(fn => fn(this.status)); },
+  async pull() {
+    try {
+      const r = await fetch(`https://raw.githubusercontent.com/${this.REPO}/main/${this.FILE}?t=${Date.now()}`, { cache: 'no-cache' });
+      if (!r.ok) return null;
+      return await r.json();
+    } catch { return null; }
+  },
+  async push() {
+    const pat = Store.getPAT();
+    if (!pat) { this.status = 'idle'; this._emit(); return false; }
+    if (!navigator.onLine) { this.status = 'offline'; this._emit(); Store.setQueued(true); return false; }
+    this.status = 'syncing'; this._emit();
+    const custom = Store.loadCustom();
+    try {
+      // get current sha (if file exists)
+      let sha = null;
+      try {
+        const r = await fetch(`https://api.github.com/repos/${this.REPO}/contents/${this.FILE}`, {
+          headers: { Authorization: `Bearer ${pat}`, Accept: 'application/vnd.github+json' }
+        });
+        if (r.ok) sha = (await r.json()).sha;
+      } catch {}
+      const total = (custom.days || []).reduce((s, d) => s + (d.words || []).length, 0);
+      const content = btoa(unescape(encodeURIComponent(JSON.stringify({ ...custom, updatedAt: new Date().toISOString() }, null, 2))));
+      const body = JSON.stringify({
+        message: `Update custom.json (${total} entries)`,
+        content, ...(sha ? { sha } : {})
+      });
+      const r2 = await fetch(`https://api.github.com/repos/${this.REPO}/contents/${this.FILE}`, {
+        method: 'PUT',
+        headers: { Authorization: `Bearer ${pat}`, 'Content-Type': 'application/json', Accept: 'application/vnd.github+json' },
+        body
+      });
+      if (r2.ok) {
+        Store.setQueued(false);
+        this.status = 'ok'; this._emit();
+        return true;
+      } else {
+        const err = await r2.json().catch(() => ({}));
+        console.warn('Sync failed:', r2.status, err);
+        this.status = 'err'; this._emit();
+        Store.setQueued(true);
+        return false;
+      }
+    } catch (e) {
+      console.warn('Sync error:', e);
+      this.status = 'err'; this._emit();
+      Store.setQueued(true);
+      return false;
     }
+  },
+  async test() {
+    const pat = Store.getPAT();
+    if (!pat) return { ok: false, msg: 'PAT 미설정' };
+    try {
+      const r = await fetch(`https://api.github.com/repos/${this.REPO}`, {
+        headers: { Authorization: `Bearer ${pat}`, Accept: 'application/vnd.github+json' }
+      });
+      if (r.ok) {
+        const d = await r.json();
+        const perms = d.permissions || {};
+        if (perms.push) return { ok: true, msg: '연결 성공 · push 권한 OK' };
+        return { ok: false, msg: 'push 권한 없음' };
+      }
+      if (r.status === 401) return { ok: false, msg: '토큰 무효' };
+      return { ok: false, msg: `HTTP ${r.status}` };
+    } catch (e) { return { ok: false, msg: e.message }; }
+  }
+};
+window.addEventListener('online', () => { if (Store.isQueued()) CloudSync.push(); });
+
+/* ════════════════════════════════════════════════════════════════
+   SRS — Leitner 5-box
+   ════════════════════════════════════════════════════════════════ */
+const SRS = {
+  intervals: [null, 1, 3, 7, 14, 30],
+  romans: ['Ⅰ', 'Ⅱ', 'Ⅲ', 'Ⅳ', 'Ⅴ'],
+  labels: ['1 day', '3 days', '1 week', '2 weeks', '1 month'],
+  apply(s, id, ok) {
+    const p = s.progress[id] || { box: 0, correct: 0, total: 0 };
+    p.total += 1;
+    if (ok) { p.correct += 1; p.box = Math.min(5, (p.box || 0) + 1); p.lastResult = 'right'; }
+    else { p.box = 1; p.lastResult = 'wrong'; }
     p.lastReviewed = Date.now();
-    state.progress[wordId] = p;
+    s.progress[id] = p;
   },
-
-  /** Is this word due today? */
-  isDue(p, now=Date.now()) {
-    if (!p || !p.box) return true;        // never studied → due
+  isDue(p, now = Date.now()) {
+    if (!p || !p.box) return true;
     const days = this.intervals[p.box] || 1;
-    const last = p.lastReviewed || 0;
-    return (now - last) >= days * 24 * 3600 * 1000;
+    return (now - (p.lastReviewed || 0)) >= days * 24 * 3600 * 1000;
   },
-
-  /** Get all due words */
-  due(state, words, now=Date.now()) {
-    return words.filter(w => this.isDue(state.progress[w.id], now));
-  },
-
-  /** Counts per box */
-  boxCounts(state, words) {
-    const counts = [0,0,0,0,0,0]; // index 0 = unstudied
-    words.forEach(w => {
-      const p = state.progress[w.id];
-      const b = (p && p.box) ? p.box : 0;
-      counts[b] += 1;
-    });
-    return counts;
+  due(s, words) { return words.filter(w => this.isDue(s.progress[w.id])); },
+  boxCounts(s, words) {
+    const c = [0,0,0,0,0,0];
+    words.forEach(w => { const p = s.progress[w.id]; c[(p && p.box) ? p.box : 0] += 1; });
+    return c;
   }
 };
 
-/* ─── TTS ─────────────────────────────────────────── */
+/* ════════════════════════════════════════════════════════════════
+   TTS
+   ════════════════════════════════════════════════════════════════ */
 const TTS = {
-  _voice: null,
+  _v: null,
   init() {
     if (!('speechSynthesis' in window)) return;
     const pick = () => {
-      const v = speechSynthesis.getVoices();
-      if (!v.length) return;
-      this._voice =
-        v.find(x => /en-US/i.test(x.lang) && /Samantha|Alex|Google US|Aaron|Nicky|Joanna|Daniel/i.test(x.name))
-        || v.find(x => /^en-?US/i.test(x.lang))
-        || v.find(x => /^en/i.test(x.lang))
-        || v[0];
+      const vs = speechSynthesis.getVoices();
+      if (!vs.length) return;
+      this._v = vs.find(x => /en-US/i.test(x.lang) && /Samantha|Alex|Google US|Aaron|Nicky|Joanna/i.test(x.name))
+        || vs.find(x => /^en-?US/i.test(x.lang))
+        || vs.find(x => /^en/i.test(x.lang))
+        || vs[0];
     };
     pick();
     speechSynthesis.onvoiceschanged = pick;
   },
-  speak(text, rate=null) {
-    if (!('speechSynthesis' in window)) { Toast.show('이 브라우저는 음성 합성을 지원하지 않습니다'); return; }
+  speak(text, rate = null) {
+    if (!('speechSynthesis' in window)) return;
     const s = Store.load().settings;
     const u = new SpeechSynthesisUtterance(text);
-    if (this._voice) u.voice = this._voice;
+    if (this._v) u.voice = this._v;
     u.lang = 'en-US';
     u.rate = rate || s.ttsRate || 0.95;
     u.pitch = 1.0;
     speechSynthesis.cancel();
     speechSynthesis.speak(u);
   },
-  slow(text) { const s = Store.load().settings; this.speak(text, s.slowRate || 0.55); }
+  slow(text) { this.speak(text, Store.load().settings.slowRate || 0.55); }
 };
 
-/* ─── DATA ─────────────────────────────────────────── */
+/* ════════════════════════════════════════════════════════════════
+   DATA
+   ════════════════════════════════════════════════════════════════ */
 const VocabRepo = {
   data: null,
   async load() {
     if (this.data) return this.data;
     const resp = await fetch('vocabulary.json', { cache: 'no-cache' });
     this.data = await resp.json();
+
+    // Pull cloud custom.json (if available) — overrides local if cloud has more
+    try {
+      const cloud = await CloudSync.pull();
+      if (cloud && cloud.days) {
+        const local = Store.loadCustom();
+        const cloudTotal = (cloud.days || []).reduce((s, d) => s + (d.words || []).length, 0);
+        const localTotal = (local.days || []).reduce((s, d) => s + (d.words || []).length, 0);
+        if (cloudTotal >= localTotal) {
+          Store.saveCustom({ days: cloud.days });
+        }
+      }
+    } catch {}
+
+    this._mergeCustom();
     return this.data;
   },
-  allWords(filter=null) {
+  _mergeCustom() {
+    if (!this.data) return;
+    this.data.days = this.data.days.filter(d => d.category !== 'custom');
+    const c = Store.loadCustom();
+    (c.days || []).forEach(d => this.data.days.push(d));
+    this.data.days.sort((a, b) => {
+      // Custom days appear at end
+      if (a.category === 'custom' && b.category !== 'custom') return 1;
+      if (b.category === 'custom' && a.category !== 'custom') return -1;
+      return (a.day || 0) - (b.day || 0);
+    });
+  },
+  addCustom(word) {
+    const c = Store.loadCustom();
+    if (!c.days || !c.days.length) {
+      c.days = [{ day: 999, label: '내 단어', category: 'custom', date: new Date().toISOString().slice(0, 10), words: [] }];
+    }
+    c.days[0].words.push(word);
+    Store.saveCustom(c);
+    this._mergeCustom();
+    // Background sync
+    if (Store.getPAT()) CloudSync.push().catch(() => {});
+  },
+  removeCustom(id) {
+    const c = Store.loadCustom();
+    (c.days || []).forEach(d => { d.words = (d.words || []).filter(w => w.id !== id); });
+    Store.saveCustom(c);
+    this._mergeCustom();
+    if (Store.getPAT()) CloudSync.push().catch(() => {});
+  },
+  allWords(f = null) {
     if (!this.data) return [];
     let list = [];
-    this.data.days.forEach(d => {
-      d.words.forEach(w => list.push({ ...w, day: d.day, dayLabel: d.label || `Day ${d.day}`, category: d.category }));
-    });
-    if (filter) list = list.filter(filter);
-    return list;
+    this.data.days.forEach(d => d.words.forEach(w => list.push({ ...w, day: d.day, dayLabel: d.label || `Day ${d.day}`, category: d.category })));
+    return f ? list.filter(f) : list;
   },
-  byDay(dayKey) {
-    if (dayKey === 'all') return this.allWords();
-    if (dayKey === 'starred') {
-      const s = Store.load().starred;
-      return this.allWords(w => s[w.id]);
-    }
-    return this.allWords(w => `${w.day}` === `${dayKey}`);
+  byDay(k) {
+    if (k === 'all') return this.allWords();
+    if (k === 'starred') { const s = Store.load().starred; return this.allWords(w => s[w.id]); }
+    return this.allWords(w => `${w.day}` === `${k}`);
   },
   dayMeta() {
-    return this.data.days.map(d => ({
-      key: d.day, label: d.label || `Day ${d.day}`, category: d.category, count: d.words.length, date: d.date
-    }));
+    return this.data.days.map(d => ({ key: d.day, label: d.label || `Day ${d.day}`, category: d.category, count: d.words.length, date: d.date }));
   }
 };
 
-/* ─── UTIL ─────────────────────────────────────────── */
-const $ = (s, root=document) => root.querySelector(s);
-const $$ = (s, root=document) => Array.from(root.querySelectorAll(s));
-const el = (tag, props={}, ...children) => {
-  const e = document.createElement(tag);
-  Object.entries(props).forEach(([k,v]) => {
+/* ════════════════════════════════════════════════════════════════
+   UTIL
+   ════════════════════════════════════════════════════════════════ */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const el = (t, p = {}, ...c) => {
+  const e = document.createElement(t);
+  Object.entries(p).forEach(([k, v]) => {
     if (k === 'class') e.className = v;
     else if (k === 'html') e.innerHTML = v;
     else if (k.startsWith('on')) e.addEventListener(k.slice(2).toLowerCase(), v);
-    else if (k === 'dataset') Object.entries(v).forEach(([dk,dv]) => e.dataset[dk] = dv);
+    else if (k === 'dataset') Object.entries(v).forEach(([a, b]) => e.dataset[a] = b);
     else if (v != null) e.setAttribute(k, v);
   });
-  children.flat().forEach(c => e.append(c instanceof Node ? c : document.createTextNode(c)));
+  c.flat().forEach(x => e.append(x instanceof Node ? x : document.createTextNode(x)));
   return e;
 };
+const esc = (s) => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const dday = (d) => { const t = new Date(); t.setHours(0,0,0,0); const e = new Date(d); e.setHours(0,0,0,0); return Math.round((e - t) / 86400000); };
+const shuffle = (a) => { const r = a.slice(); for (let i = r.length - 1; i > 0; i--) { const j = (Math.random() * (i + 1)) | 0; [r[i], r[j]] = [r[j], r[i]]; } return r; };
+const roman = (n) => ['', 'Ⅰ','Ⅱ','Ⅲ','Ⅳ','Ⅴ','Ⅵ','Ⅶ','Ⅷ','Ⅸ','Ⅹ','Ⅺ','Ⅻ'][n] || `${n}`;
+const POS = { v: 'verb', n: 'noun', a: 'adj.', ad: 'adv.', phrase: 'phr.', phrasal: 'phr. v.' };
+
 const Toast = {
   el: null,
-  show(msg, ms=1600) {
+  show(m, ms = 1700) {
     if (!this.el) this.el = $('#toast');
-    this.el.textContent = msg;
+    this.el.textContent = m;
     this.el.classList.add('show');
     clearTimeout(this._t);
     this._t = setTimeout(() => this.el.classList.remove('show'), ms);
   }
 };
-const escapeHtml = (s) => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const dday = (examDate) => {
-  const today = new Date(); today.setHours(0,0,0,0);
-  const exam = new Date(examDate); exam.setHours(0,0,0,0);
-  return Math.round((exam - today) / (24*3600*1000));
-};
-const shuffle = (a) => { const arr = a.slice(); for (let i=arr.length-1;i>0;i--){ const j=(Math.random()*(i+1))|0; [arr[i],arr[j]]=[arr[j],arr[i]]; } return arr; };
 
-/* ─── WORD CARD RENDERER (shared) ─────────────────────────────────────────── */
-function renderWordCard(w, opts={}) {
+/* — SVG icons (stroke style) — */
+const ICO = {
+  play:    '<svg viewBox="0 0 24 24"><path d="M7 5v14l11-7z"/></svg>',
+  turtle:  '<svg viewBox="0 0 24 24"><path d="M3 17h2l1.5-3M21 17h-2l-1.5-3M9 17h6M7 11a5 5 0 0 1 10 0v3H7z M5 14a2 2 0 0 1 0-4 M19 14a2 2 0 0 0 0-4 M19 7l2-2 M5 7l-2-2"/></svg>',
+  search:  '<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg>',
+  bookmark:'<svg viewBox="0 0 24 24"><path d="M6 4h12v17l-6-4-6 4z"/></svg>',
+  sound:   '<svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9zM16 8a5 5 0 0 1 0 8"/></svg>'
+};
+
+/* ════════════════════════════════════════════════════════════════
+   ENTRY (word) renderer — used in multiple views
+   ════════════════════════════════════════════════════════════════ */
+function renderEntry(w, idx) {
   const s = Store.load();
   const starred = !!s.starred[w.id];
-  const card = el('div', { class:'word-card', dataset:{ id: w.id } });
-  card.innerHTML = `
-    <div class="row1">
-      <span class="w">${escapeHtml(w.w)}</span>
-      <span class="ipa">${escapeHtml(w.ipa || '')}</span>
-      ${w.pos ? `<span class="pos">${escapeHtml(w.pos)}</span>` : ''}
-    </div>
-    <div class="ko">${escapeHtml(w.ko || '')}</div>
-    ${w.syn && w.syn.length ? `<div class="syn">syn: ${w.syn.map(escapeHtml).join(', ')}</div>` : ''}
-    ${w.ex ? `<div class="ex">${escapeHtml(w.ex)}</div>` : ''}
-    ${w.exKo ? `<div class="exko">→ ${escapeHtml(w.exKo)}</div>` : ''}
-    ${w.note ? `<div class="note">💡 ${escapeHtml(w.note)}</div>` : ''}
-    <div class="actions">
-      <button class="tts-btn" data-act="play">🔊 발음</button>
-      <button class="tts-btn slow" data-act="slow">🐢 천천히</button>
-      <button class="star ${starred ? 'on' : ''}" data-act="star">${starred ? '★' : '☆'}</button>
+  const num = String(idx + 1).padStart(3, '0');
+  const node = el('article', { class: 'entry', dataset: { id: w.id } });
+  const synHtml = (w.syn && w.syn.length) ? `<div class="syn">${w.syn.map(x => `<span>${esc(x)}</span>`).join('')}</div>` : '';
+  const noteHtml = w.note ? `<div class="note">${esc(w.note)}</div>` : '';
+  const exHtml = w.ex ? `<div class="ex">${esc(w.ex)}</div>` : '';
+  const exKoHtml = w.exKo ? `<div class="exko">${esc(w.exKo)}</div>` : '';
+  node.innerHTML = `
+    <div class="marker">§<span class="num">${num}</span></div>
+    <div class="body">
+      <div class="word-row">
+        <span class="word">${esc(w.w)}</span>
+        <span class="ipa">${esc(w.ipa || '')}</span>
+        ${w.pos ? `<span class="pos">${esc(POS[w.pos] || w.pos)}</span>` : ''}
+      </div>
+      <div class="ko">${esc(w.ko || '')}</div>
+      ${synHtml}
+      ${exHtml}
+      ${exKoHtml}
+      ${noteHtml}
+      <div class="actions">
+        <button data-act="play">${ICO.sound}<span>Speak</span></button>
+        <button data-act="slow">${ICO.turtle}<span>Slow</span></button>
+        <button class="star ${starred ? 'starred' : ''}" data-act="star" aria-label="bookmark">${ICO.bookmark}</button>
+      </div>
     </div>
   `;
-  card.addEventListener('click', (e) => {
-    const act = e.target.closest('[data-act]')?.dataset.act;
-    if (act === 'play') { TTS.speak(w.w); TTS.speak(w.ex); }
+  node.addEventListener('click', (ev) => {
+    const act = ev.target.closest('[data-act]')?.dataset.act;
+    if (act === 'play') { TTS.speak(w.w); if (w.ex) setTimeout(() => TTS.speak(w.ex), 750); }
     else if (act === 'slow') { TTS.slow(w.w); }
     else if (act === 'star') {
       const ss = Store.load();
       if (ss.starred[w.id]) delete ss.starred[w.id]; else ss.starred[w.id] = true;
       Store.save(ss);
-      const btn = e.target.closest('.star');
-      btn.classList.toggle('on'); btn.textContent = btn.classList.contains('on') ? '★' : '☆';
+      const btn = ev.target.closest('.star');
+      btn.classList.toggle('starred');
     }
   });
-  return card;
+  return node;
 }
 
-/* ─── TAB: VOCAB ─────────────────────────────────────────── */
+/* ════════════════════════════════════════════════════════════════
+   VIEW: ENTRIES (vocab)
+   ════════════════════════════════════════════════════════════════ */
 const VocabView = {
   currentDay: null,
   query: '',
   render(main) {
     const days = VocabRepo.dayMeta();
     if (this.currentDay == null) {
-      // Default to most recent vocab day
-      const vocabDays = days.filter(d => d.category === 'vocab');
-      this.currentDay = vocabDays.length ? vocabDays[vocabDays.length-1].key : days[0]?.key;
+      const v = days.filter(d => d.category === 'vocab');
+      this.currentDay = v.length ? v[v.length - 1].key : days[0]?.key;
     }
     main.innerHTML = '';
+    const wrap = el('div', { class: 'tab-content' });
 
-    // Day strip
-    const strip = el('div', { class: 'day-strip' });
-    strip.append(this._chip('all', '전체', this.currentDay === 'all', 'all'));
-    strip.append(this._chip('starred', '⭐ 즐겨찾기', this.currentDay === 'starred', 'all'));
-    days.filter(d => d.category === 'vocab').forEach(d => {
-      strip.append(this._chip(d.key, `Day ${d.key}`, this.currentDay == d.key));
-    });
-    days.filter(d => d.category === 'listening').forEach(d => {
-      strip.append(this._chip(d.key, `🎧 ${d.label}`, this.currentDay == d.key, 'listening'));
-    });
-    main.append(strip);
+    // Chapter header
+    const meta = days.find(d => `${d.key}` === `${this.currentDay}`);
+    const headRight = meta
+      ? `${meta.count} entries${meta.date ? ' · ' + meta.date : ''}`
+      : 'all entries';
+    const chapter = el('div', { class: 'chapter' });
+    if (this.currentDay === 'all') {
+      chapter.innerHTML = `<div><div class="label">Reading list</div><h2><em>All</em> Entries</h2></div><div class="meta">${VocabRepo.allWords().length} words</div>`;
+    } else if (this.currentDay === 'starred') {
+      const n = VocabRepo.allWords(w => Store.load().starred[w.id]).length;
+      chapter.innerHTML = `<div><div class="label">Marked</div><h2><em>Bookmarks</em></h2></div><div class="meta">${n} words</div>`;
+    } else if (meta && meta.category === 'listening') {
+      chapter.innerHTML = `<div><div class="label">Listening</div><h2>${esc(meta.label)}</h2></div><div class="meta">${headRight}</div>`;
+    } else {
+      chapter.innerHTML = `<div><div class="label">Chapter ${roman(meta.key)}</div><h2>Day <em>${meta.key}</em></h2></div><div class="meta">${headRight}</div>`;
+    }
+    wrap.append(chapter);
+
+    // Filter strip
+    const strip = el('div', { class: 'filter-strip' });
+    strip.append(this._chip('all', 'All', this.currentDay === 'all'));
+    strip.append(this._chip('starred', 'Bookmarks', this.currentDay === 'starred'));
+    days.filter(d => d.category === 'vocab').forEach(d => strip.append(this._chip(d.key, `Day ${d.key}`, this.currentDay == d.key)));
+    days.filter(d => d.category === 'listening').forEach(d => strip.append(this._chip(d.key, d.label, this.currentDay == d.key)));
+    wrap.append(strip);
 
     // Search
-    const search = el('input', {
-      class: 'search', type: 'search', placeholder: '단어, 한국어 뜻, 동의어 검색...', value: this.query,
-      oninput: (e) => { this.query = e.target.value.trim().toLowerCase(); this._refreshList(); }
+    const search = el('div', { class: 'search' });
+    search.innerHTML = `${ICO.search.replace('<svg', '<svg class="icon"')}`;
+    const input = el('input', {
+      type: 'search', placeholder: 'Search…  단어 · 뜻 · 동의어', value: this.query,
+      oninput: (e) => { this.query = e.target.value.trim().toLowerCase(); this._refresh(); }
     });
-    main.append(search);
+    search.append(input);
+    wrap.append(search);
 
-    // List container
     const list = el('div', { class: 'word-list', id: 'word-list' });
-    main.append(list);
-    this._refreshList();
-  },
-  _chip(key, label, active, extra='') {
-    return el('button', {
-      class: `chip ${active ? 'active' : ''} ${extra}`,
-      onclick: () => { this.currentDay = key; App.route('vocab'); }
-    }, label);
-  },
-  _refreshList() {
-    const list = $('#word-list'); if (!list) return;
-    let words = VocabRepo.byDay(this.currentDay);
-    if (this.query) {
-      const q = this.query;
-      words = words.filter(w =>
-        w.w.toLowerCase().includes(q) ||
-        (w.ko || '').includes(q) ||
-        (w.syn || []).some(s => s.toLowerCase().includes(q))
-      );
-    }
-    list.innerHTML = '';
-    if (!words.length) {
-      list.append(el('div', { class: 'empty' }, el('div', {class:'icon'}, '🔍'), '검색 결과가 없습니다'));
-      return;
-    }
-    words.forEach(w => list.append(renderWordCard(w)));
-  }
-};
-
-/* ─── TAB: FLASHCARD ─────────────────────────────────────────── */
-const FlashView = {
-  pool: [],
-  idx: 0,
-  flipped: false,
-  source: 'today',   // 'today' (SRS due) | 'all' | 'day-X'
-  render(main) {
-    main.innerHTML = '';
-    // Source picker
-    const strip = el('div', { class: 'day-strip' });
-    strip.append(this._chip('today', '🎯 오늘의 복습', this.source === 'today'));
-    strip.append(this._chip('all', '전체', this.source === 'all'));
-    strip.append(this._chip('starred', '⭐ 즐겨찾기', this.source === 'starred'));
-    VocabRepo.dayMeta().filter(d => d.category === 'vocab').forEach(d => {
-      strip.append(this._chip(`day-${d.key}`, `Day ${d.key}`, this.source === `day-${d.key}`));
-    });
-    main.append(strip);
-
-    this._buildPool();
-    if (!this.pool.length) {
-      main.append(el('div', { class:'empty' }, el('div',{class:'icon'},'🎉'), '오늘 복습할 단어가 없어요!', el('br'), el('small', { class:'sub' }, '다른 소스를 선택해 보세요.')));
-      return;
-    }
-
-    // Meta bar
-    const meta = el('div', { class: 'flash-meta' });
-    meta.innerHTML = `<span>${this.idx+1} / ${this.pool.length}</span><div class="progress-bar"><div style="width:${((this.idx+1)/this.pool.length)*100}%"></div></div><span id="flash-box-label">·</span>`;
-    main.append(meta);
-
-    // Card
-    const w = this.pool[this.idx];
-    const p = Store.load().progress[w.id];
-    $('#flash-box-label', meta).textContent = p && p.box ? `${SRS.labels[p.box-1]}` : '새 단어';
-    const card = el('div', { class: 'flash-card' + (this.flipped ? ' flipped' : '') });
-    card.innerHTML = `
-      <div class="flash-tts">
-        <button class="tts-btn" data-act="play">🔊</button>
-        <button class="tts-btn slow" data-act="slow">🐢</button>
-      </div>
-      <div class="flash-front">
-        <div class="flash-pos">${escapeHtml(w.pos || '')}</div>
-        <div class="flash-w">${escapeHtml(w.w)}</div>
-        <div class="flash-ipa">${escapeHtml(w.ipa || '')}</div>
-        <div class="flash-hint">탭하면 뜻이 보입니다</div>
-      </div>
-      <div class="flash-back">
-        <div class="ko">${escapeHtml(w.ko || '')}</div>
-        ${w.syn && w.syn.length ? `<div class="syn">syn: ${w.syn.map(escapeHtml).join(', ')}</div>` : ''}
-        ${w.ex ? `<div class="ex">${escapeHtml(w.ex)}</div>` : ''}
-        ${w.exKo ? `<div class="exko">→ ${escapeHtml(w.exKo)}</div>` : ''}
-      </div>
-    `;
-    card.addEventListener('click', (e) => {
-      const act = e.target.closest('[data-act]')?.dataset.act;
-      if (act === 'play') { e.stopPropagation(); TTS.speak(w.w); setTimeout(() => TTS.speak(w.ex), 800); return; }
-      if (act === 'slow') { e.stopPropagation(); TTS.slow(w.w); return; }
-      this.flipped = !this.flipped;
-      App.route('flash');
-    });
-    main.append(card);
-
-    // Controls
-    if (this.flipped) {
-      const controls = el('div', { class: 'flash-controls' });
-      controls.append(
-        el('button', { class:'btn btn-bad', onclick: () => this._answer(false) }, '😖 모르겠어'),
-        el('button', { class:'btn btn-ok', onclick: () => this._answer(true) }, '😎 알았어')
-      );
-      main.append(controls);
-    } else {
-      const controls = el('div', { class: 'flash-controls' });
-      controls.append(
-        el('button', { class:'btn btn-ghost', onclick: () => this._skip(-1) }, '← 이전'),
-        el('button', { class:'btn btn-primary', onclick: () => { this.flipped = true; App.route('flash'); } }, '뜻 보기')
-      );
-      main.append(controls);
-    }
-    if (Store.load().settings.autoTTS) TTS.speak(w.w);
+    wrap.append(list);
+    main.append(wrap);
+    this._refresh();
   },
   _chip(key, label, active) {
     return el('button', {
-      class: `chip ${active ? 'active' : ''}` + (key.includes('day-') ? '' : ' all'),
+      class: `chip ${active ? 'active' : ''}`,
+      onclick: () => { this.currentDay = key; App.route('vocab'); }
+    }, label);
+  },
+  _refresh() {
+    const list = $('#word-list');
+    if (!list) return;
+    let words = VocabRepo.byDay(this.currentDay);
+    if (this.query) {
+      const q = this.query;
+      words = words.filter(w => w.w.toLowerCase().includes(q) || (w.ko || '').includes(q) || (w.syn || []).some(s => s.toLowerCase().includes(q)));
+    }
+    list.innerHTML = '';
+    if (!words.length) {
+      list.append(el('div', { class: 'empty' }, 'No entries found.', el('small', {}, 'try a different word')));
+      return;
+    }
+    words.forEach((w, i) => list.append(renderEntry(w, i)));
+  }
+};
+
+/* ════════════════════════════════════════════════════════════════
+   VIEW: CARDS (flashcards)
+   ════════════════════════════════════════════════════════════════ */
+const FlashView = {
+  pool: [], idx: 0, flipped: false, source: 'today',
+  render(main) {
+    main.innerHTML = '';
+    const wrap = el('div', { class: 'tab-content' });
+
+    const chapter = el('div', { class: 'chapter' });
+    chapter.innerHTML = `<div><div class="label">Repetition</div><h2><em>Cards</em></h2></div><div class="meta">leitner spaced</div>`;
+    wrap.append(chapter);
+
+    // Source filter
+    const strip = el('div', { class: 'filter-strip' });
+    strip.append(this._chip('today', 'Due Today', this.source === 'today'));
+    strip.append(this._chip('all', 'All', this.source === 'all'));
+    strip.append(this._chip('starred', 'Bookmarks', this.source === 'starred'));
+    VocabRepo.dayMeta().filter(d => d.category === 'vocab').forEach(d =>
+      strip.append(this._chip(`day-${d.key}`, `Day ${d.key}`, this.source === `day-${d.key}`))
+    );
+    wrap.append(strip);
+
+    this._buildPool();
+    if (!this.pool.length) {
+      wrap.append(el('div', { class: 'empty' }, 'Nothing to review.', el('small', {}, 'choose another set')));
+      main.append(wrap);
+      return;
+    }
+
+    const w = this.pool[this.idx];
+    const s = Store.load();
+    const p = s.progress[w.id];
+    const boxLabel = p && p.box ? `Box ${SRS.romans[p.box - 1]}` : 'New';
+
+    // Meta
+    const meta = el('div', { class: 'flash-meta' });
+    meta.innerHTML = `
+      <span>${String(this.idx + 1).padStart(2, '0')} / ${String(this.pool.length).padStart(2, '0')}</span>
+      <div class="bar"><div style="width:${((this.idx + 1) / this.pool.length) * 100}%"></div></div>
+      <span>${boxLabel}</span>
+    `;
+    wrap.append(meta);
+
+    // Stage
+    const stage = el('div', { class: 'flash-stage' });
+    stage.innerHTML = `
+      <div class="tts">
+        <button data-act="play" aria-label="speak">${ICO.sound}</button>
+        <button data-act="slow" aria-label="slow speak">${ICO.turtle}</button>
+      </div>
+      ${this.flipped ? `
+        <div class="flash-back">
+          <div class="ko">${esc(w.ko || '')}</div>
+          ${w.syn && w.syn.length ? `<div class="syn">${esc(w.syn.join(' · '))}</div>` : ''}
+          ${w.ex ? `<div class="ex">${esc(w.ex)}</div>` : ''}
+          ${w.exKo ? `<div class="exko">${esc(w.exKo)}</div>` : ''}
+        </div>
+      ` : `
+        <div class="flash-front">
+          <div class="flash-pos">${esc(POS[w.pos] || w.pos || '')}</div>
+          <div class="flash-word">${esc(w.w)}</div>
+          <div class="flash-ipa">${esc(w.ipa || '')}</div>
+          <div class="flash-hint">tap to reveal</div>
+        </div>
+      `}
+    `;
+    stage.addEventListener('click', (ev) => {
+      const act = ev.target.closest('[data-act]')?.dataset.act;
+      if (act === 'play') { ev.stopPropagation(); TTS.speak(w.w); if (w.ex) setTimeout(() => TTS.speak(w.ex), 750); return; }
+      if (act === 'slow') { ev.stopPropagation(); TTS.slow(w.w); return; }
+      this.flipped = !this.flipped;
+      App.route('flash');
+    });
+    wrap.append(stage);
+
+    // Controls
+    const controls = el('div', { class: 'flash-controls' });
+    if (this.flipped) {
+      controls.innerHTML = `
+        <button class="bad" data-act="bad">Don't know</button>
+        <button class="ok" data-act="ok">I know it</button>
+      `;
+      controls.addEventListener('click', (ev) => {
+        const a = ev.target.closest('[data-act]')?.dataset.act;
+        if (a === 'bad') this._answer(false);
+        else if (a === 'ok') this._answer(true);
+      });
+    } else {
+      controls.innerHTML = `
+        <button class="ghost" data-act="prev">← prev</button>
+        <button class="primary" data-act="flip">Reveal</button>
+      `;
+      controls.addEventListener('click', (ev) => {
+        const a = ev.target.closest('[data-act]')?.dataset.act;
+        if (a === 'prev') this._skip(-1);
+        else if (a === 'flip') { this.flipped = true; App.route('flash'); }
+      });
+    }
+    wrap.append(controls);
+
+    main.append(wrap);
+    if (Store.load().settings.autoTTS && !this.flipped) TTS.speak(w.w);
+  },
+  _chip(key, label, active) {
+    return el('button', {
+      class: `chip ${active ? 'active' : ''}`,
       onclick: () => { this.source = key; this.idx = 0; this.flipped = false; this._buildPool(); App.route('flash'); }
     }, label);
   },
@@ -649,410 +1992,535 @@ const FlashView = {
     if (this.source === 'today') {
       pool = SRS.due(s, VocabRepo.allWords(w => w.category === 'vocab'));
       pool = shuffle(pool).slice(0, 50);
-    } else if (this.source === 'all') pool = shuffle(VocabRepo.allWords());
+    }
+    else if (this.source === 'all') pool = shuffle(VocabRepo.allWords());
     else if (this.source === 'starred') pool = VocabRepo.allWords(w => s.starred[w.id]);
     else if (this.source.startsWith('day-')) pool = shuffle(VocabRepo.byDay(this.source.slice(4)));
     else pool = [];
     this.pool = pool;
     if (this.idx >= this.pool.length) this.idx = 0;
   },
-  _answer(correct) {
+  _answer(ok) {
     const w = this.pool[this.idx];
     const s = Store.load();
-    SRS.apply(s, w.id, correct);
+    SRS.apply(s, w.id, ok);
     Store.save(s);
-    Toast.show(correct ? `✓ ${SRS.labels[s.progress[w.id].box-1]}로 이동` : '✗ Box 1로 리셋');
+    Toast.show(ok ? `→ Box ${SRS.romans[s.progress[w.id].box - 1]}` : '→ Box Ⅰ');
     this._skip(1);
   },
-  _skip(dir) {
-    this.flipped = false;
-    this.idx = (this.idx + dir + this.pool.length) % this.pool.length;
-    App.route('flash');
-  }
+  _skip(d) { this.flipped = false; this.idx = (this.idx + d + this.pool.length) % this.pool.length; App.route('flash'); }
 };
 
-/* ─── TAB: QUIZ ─────────────────────────────────────────── */
+/* ════════════════════════════════════════════════════════════════
+   VIEW: EXAMEN (quiz)
+   ════════════════════════════════════════════════════════════════ */
 const QuizView = {
-  state: 'setup',         // 'setup' | 'playing' | 'result'
-  mode: 'en-ko',          // 'en-ko' | 'ko-en' | 'syn'
-  dayKey: 'all',
-  questions: [],
-  idx: 0,
-  score: 0,
-  wrong: [],
+  state: 'setup', mode: 'en-ko', dayKey: 'all',
+  questions: [], idx: 0, score: 0, wrong: [],
   render(main) {
     main.innerHTML = '';
-    if (this.state === 'setup') return this._renderSetup(main);
-    if (this.state === 'playing') return this._renderQuestion(main);
-    if (this.state === 'result') return this._renderResult(main);
+    const wrap = el('div', { class: 'tab-content' });
+    if (this.state === 'setup') this._setup(wrap);
+    else if (this.state === 'playing') this._question(wrap);
+    else if (this.state === 'result') this._result(wrap);
+    main.append(wrap);
   },
-  _renderSetup(main) {
-    const setup = el('div', { class: 'quiz-setup' });
-    setup.append(el('label', {}, '문제 형식'));
-    const modes = el('div', { class: 'quiz-mode' });
-    [['en-ko','영→한'],['ko-en','한→영'],['syn','동의어 찾기'],['ipa','발음 듣고 맞히기']].forEach(([k,l]) => {
+  _setup(wrap) {
+    const chapter = el('div', { class: 'chapter' });
+    chapter.innerHTML = `<div><div class="label">Self-Examination</div><h2><em>Examen</em></h2></div><div class="meta">10 questions</div>`;
+    wrap.append(chapter);
+
+    // Mode picker
+    const sect = el('div', { class: 'quiz-section' });
+    sect.append(el('div', { class: 'label' }, 'FORMAT'));
+    const modes = el('div', { class: 'quiz-modes' });
+    [['en-ko', 'English → Korean', '영→한'], ['ko-en', 'Korean → English', '한→영'], ['syn', 'Synonym match', '동의어'], ['ipa', 'Listen & pick', '발음']].forEach(([k, l, ko]) => {
       modes.append(el('button', {
-        class: 'chip' + (this.mode === k ? ' active' : ''),
-        onclick: () => { this.mode = k; this.render(main); }
-      }, l));
+        class: this.mode === k ? 'active' : '',
+        onclick: () => { this.mode = k; App.route('quiz'); }
+      }, el('span', {}, l), el('span', { class: 'ko' }, ko)));
     });
-    setup.append(modes);
+    sect.append(modes);
+    wrap.append(sect);
 
-    setup.append(el('label', {}, '범위 (어느 단어를 출제할까요?)'));
-    const days = el('div', { class: 'day-strip' });
-    days.append(el('button', {
-      class: 'chip all' + (this.dayKey === 'all' ? ' active' : ''),
-      onclick: () => { this.dayKey = 'all'; this.render(main); }
-    }, '전체'));
-    days.append(el('button', {
-      class: 'chip all' + (this.dayKey === 'starred' ? ' active' : ''),
-      onclick: () => { this.dayKey = 'starred'; this.render(main); }
-    }, '⭐ 즐겨찾기'));
+    // Range
+    const range = el('div', { class: 'quiz-section' });
+    range.append(el('div', { class: 'label' }, 'SCOPE'));
+    const pills = el('div', { class: 'range-pills' });
+    pills.append(el('button', { class: this.dayKey === 'all' ? 'active' : '', onclick: () => { this.dayKey = 'all'; App.route('quiz'); } }, 'ALL'));
+    pills.append(el('button', { class: this.dayKey === 'starred' ? 'active' : '', onclick: () => { this.dayKey = 'starred'; App.route('quiz'); } }, 'BOOKMARKS'));
     VocabRepo.dayMeta().filter(d => d.category === 'vocab').forEach(d => {
-      days.append(el('button', {
-        class: 'chip' + (this.dayKey == d.key ? ' active' : ''),
-        onclick: () => { this.dayKey = d.key; this.render(main); }
-      }, `Day ${d.key}`));
+      pills.append(el('button', {
+        class: this.dayKey == d.key ? 'active' : '',
+        onclick: () => { this.dayKey = d.key; App.route('quiz'); }
+      }, `DAY ${d.key}`));
     });
-    setup.append(days);
+    range.append(pills);
+    wrap.append(range);
 
-    setup.append(el('button', {
-      class: 'btn btn-primary',
-      style: 'margin-top:14px;',
-      onclick: () => this._start()
-    }, '🎯 퀴즈 시작 (10문제)'));
-    main.append(setup);
+    wrap.append(el('button', { class: 'quiz-start', onclick: () => this._start() }, 'Begin examination'));
   },
   _start() {
     const pool = this.dayKey === 'all'
       ? VocabRepo.allWords(w => w.category === 'vocab')
       : VocabRepo.byDay(this.dayKey);
-    if (pool.length < 4) { Toast.show('단어가 너무 적어요 (최소 4개 필요)'); return; }
+    if (pool.length < 4) { Toast.show('Not enough entries (need 4+)'); return; }
     const n = Math.min(10, pool.length);
     const picked = shuffle(pool).slice(0, n);
     const distractorPool = VocabRepo.allWords(w => w.category === 'vocab');
-    this.questions = picked.map(target => {
-      const distractors = shuffle(distractorPool.filter(w => w.id !== target.id)).slice(0, 3);
-      return { target, choices: shuffle([target, ...distractors]) };
-    });
+    this.questions = picked.map(target => ({ target, choices: shuffle([target, ...shuffle(distractorPool.filter(w => w.id !== target.id)).slice(0, 3)]) }));
     this.idx = 0; this.score = 0; this.wrong = []; this.state = 'playing';
     App.route('quiz');
   },
-  _renderQuestion(main) {
+  _question(wrap) {
     const q = this.questions[this.idx];
     const w = q.target;
-
-    const bar = el('div', { class: 'quiz-bar' });
-    bar.innerHTML = `<span>문제 ${this.idx+1} / ${this.questions.length}</span><span>점수 ${this.score}</span>`;
-    main.append(bar);
+    wrap.append(this._barEl());
 
     const qEl = el('div', { class: 'quiz-q' });
-    let promptHtml = '';
-    let displayText = '';
     if (this.mode === 'en-ko') {
-      promptHtml = `<div class="label">다음 단어의 뜻은?</div><div class="prompt">${escapeHtml(w.w)}</div><div class="ipa">${escapeHtml(w.ipa || '')}</div>`;
+      qEl.innerHTML = `<div class="stem-label">DEFINE</div><div class="stem">${esc(w.w)}</div><div class="stem-ipa">${esc(w.ipa || '')}</div>`;
     } else if (this.mode === 'ko-en') {
-      promptHtml = `<div class="label">다음 뜻을 가진 단어는?</div><div class="prompt">${escapeHtml(w.ko)}</div>`;
+      qEl.innerHTML = `<div class="stem-label">WORD FOR</div><div class="stem ko">${esc(w.ko)}</div>`;
     } else if (this.mode === 'syn') {
-      const syn = (w.syn && w.syn[0]) || w.ko;
-      promptHtml = `<div class="label">다음과 비슷한 단어는?</div><div class="prompt">${escapeHtml(syn)}</div>`;
-    } else if (this.mode === 'ipa') {
-      promptHtml = `<div class="label">발음을 듣고 맞는 단어를 고르세요</div><div class="prompt">🔊</div>`;
-      displayText = w.w;
+      const s = (w.syn && w.syn[0]) || w.ko;
+      qEl.innerHTML = `<div class="stem-label">SIMILAR TO</div><div class="stem ko">${esc(s)}</div>`;
+    } else {
+      qEl.innerHTML = `<div class="stem-label">LISTEN & CHOOSE</div><button class="audio-btn" aria-label="play">${ICO.sound}</button>`;
+      qEl.querySelector('.audio-btn').addEventListener('click', () => TTS.speak(w.w));
+      setTimeout(() => TTS.speak(w.w), 350);
     }
-    qEl.innerHTML = promptHtml;
-    if (this.mode === 'ipa') {
-      qEl.append(el('button', { class:'btn btn-primary', style:'margin-top:10px;', onclick: () => TTS.speak(w.w) }, '🔊 다시 듣기'));
-      setTimeout(() => TTS.speak(w.w), 300);
-    }
-    main.append(qEl);
+    wrap.append(qEl);
 
     const choices = el('div', { class: 'quiz-choices' });
     q.choices.forEach((c, i) => {
+      const letter = String.fromCharCode(0x41 + i); // A, B, C, D
       let text;
       if (this.mode === 'en-ko') text = c.ko;
-      else if (this.mode === 'ko-en') text = c.w;
-      else if (this.mode === 'syn') text = c.w;
-      else text = c.w;
-      const btn = el('button', { class:'quiz-choice', dataset:{ id:c.id } },
-        el('span', { class:'num' }, String(i+1)),
-        text
+      else if (this.mode === 'ko-en' || this.mode === 'syn' || this.mode === 'ipa') text = c.w;
+      const btn = el('button', { class: 'quiz-choice', dataset: { id: c.id } },
+        el('span', { class: 'letter' }, letter),
+        el('span', {}, text)
       );
       btn.addEventListener('click', () => this._answer(c, btn));
       choices.append(btn);
     });
-    main.append(choices);
+    wrap.append(choices);
+  },
+  _barEl() {
+    return el('div', { class: 'quiz-bar' },
+      el('span', {}, `Q ${this.idx + 1} of ${this.questions.length}`),
+      el('span', {}, `Score · ${this.score}`)
+    );
   },
   _answer(picked, btn) {
     const q = this.questions[this.idx];
-    const correct = picked.id === q.target.id;
-    if (correct) { this.score += 1; btn.classList.add('right'); }
+    const ok = picked.id === q.target.id;
+    if (ok) { this.score += 1; btn.classList.add('right'); }
     else {
       btn.classList.add('wrong');
       this.wrong.push(q.target);
-      // also reveal correct
       $$('.quiz-choice').forEach(b => { if (b.dataset.id === q.target.id) b.classList.add('right'); });
     }
-    // Apply to SRS as well
     const s = Store.load();
-    SRS.apply(s, q.target.id, correct);
+    SRS.apply(s, q.target.id, ok);
     Store.save(s);
     $$('.quiz-choice').forEach(b => b.disabled = true);
     setTimeout(() => {
       if (this.idx + 1 >= this.questions.length) {
         const ss = Store.load();
-        ss.quizHistory.push({
-          date: Date.now(), mode: this.mode,
-          score: this.score, total: this.questions.length,
-          wrong: this.wrong.map(w => w.id)
-        });
-        // streak update
+        ss.quizHistory.push({ date: Date.now(), mode: this.mode, score: this.score, total: this.questions.length, wrong: this.wrong.map(w => w.id) });
         const today = new Date(); today.setHours(0,0,0,0);
         const last = ss.streak.last ? new Date(ss.streak.last) : null;
         if (last) last.setHours(0,0,0,0);
-        if (!last) { ss.streak = { last: today.getTime(), days: 1 }; }
-        else if (last.getTime() === today.getTime()) { /* already counted */ }
-        else if (today - last === 24*3600*1000) { ss.streak = { last: today.getTime(), days: ss.streak.days + 1 }; }
-        else { ss.streak = { last: today.getTime(), days: 1 }; }
+        if (!last) ss.streak = { last: today.getTime(), days: 1 };
+        else if (last.getTime() === today.getTime()) {}
+        else if (today - last === 86400000) ss.streak = { last: today.getTime(), days: ss.streak.days + 1 };
+        else ss.streak = { last: today.getTime(), days: 1 };
         Store.save(ss);
         this.state = 'result';
-      } else {
-        this.idx += 1;
-      }
+      } else this.idx += 1;
       App.route('quiz');
-    }, 850);
+    }, 950);
   },
-  _renderResult(main) {
-    const r = el('div', { class: 'quiz-result' });
+  _result(wrap) {
+    const chapter = el('div', { class: 'chapter' });
+    chapter.innerHTML = `<div><div class="label">Mark</div><h2><em>Result</em></h2></div><div class="meta">${new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })}</div>`;
+    wrap.append(chapter);
+
     const pct = Math.round((this.score / this.questions.length) * 100);
-    const emoji = pct === 100 ? '🏆' : pct >= 80 ? '🎉' : pct >= 60 ? '👍' : '💪';
-    r.innerHTML = `<h2>${emoji} ${pct}%</h2><div class="score">${this.score} / ${this.questions.length} 정답</div>`;
-    const actions = el('div', { class: 'flash-controls' });
-    actions.append(
-      el('button', { class:'btn btn-ghost', onclick: () => { this.state = 'setup'; App.route('quiz'); } }, '다시 설정'),
-      el('button', { class:'btn btn-primary', onclick: () => { this._start(); } }, '한 번 더 →')
-    );
-    r.append(actions);
-    main.append(r);
+    const verdict = pct === 100 ? 'magna cum laude' : pct >= 80 ? 'with distinction' : pct >= 60 ? 'a passing mark' : 'requires study';
+
+    const r = el('div', { class: 'quiz-result' });
+    r.innerHTML = `
+      <div class="verdict">${verdict}</div>
+      <div class="score">${pct}<sup>%</sup></div>
+      <div class="fraction">${this.score} OF ${this.questions.length}</div>
+      <div class="actions">
+        <button data-act="setup">Change settings</button>
+        <button data-act="again">Again →</button>
+      </div>
+    `;
+    r.querySelector('[data-act="setup"]').addEventListener('click', () => { this.state = 'setup'; App.route('quiz'); });
+    r.querySelector('[data-act="again"]').addEventListener('click', () => this._start());
+    wrap.append(r);
 
     if (this.wrong.length) {
-      const wl = el('div', { class:'wrong-list', style:'margin-top:20px;' });
-      wl.append(el('h3', {}, `❌ 틀린 단어 ${this.wrong.length}개 (자동으로 SRS Box 1으로 이동했어요)`));
-      this.wrong.forEach(w => wl.append(renderWordCard(w)));
-      main.append(wl);
+      const wl = el('div', { class: 'wrong-list' });
+      wl.append(el('h3', {}, `Missed — ${this.wrong.length}`));
+      this.wrong.forEach((w, i) => wl.append(renderEntry(w, i)));
+      wrap.append(wl);
     }
   }
 };
 
-/* ─── TAB: SRS ─────────────────────────────────────────── */
+/* ════════════════════════════════════════════════════════════════
+   VIEW: LEDGER (SRS)
+   ════════════════════════════════════════════════════════════════ */
 const SRSView = {
   render(main) {
     main.innerHTML = '';
+    const wrap = el('div', { class: 'tab-content' });
     const state = Store.load();
-    const allVocab = VocabRepo.allWords(w => w.category === 'vocab');
-    const due = SRS.due(state, allVocab);
-    const counts = SRS.boxCounts(state, allVocab);
+    const all = VocabRepo.allWords(w => w.category === 'vocab');
+    const due = SRS.due(state, all);
+    const counts = SRS.boxCounts(state, all);
 
-    const banner = el('div', { class:'srs-banner' });
-    banner.innerHTML = `
+    const chapter = el('div', { class: 'chapter' });
+    chapter.innerHTML = `<div><div class="label">Spaced repetition</div><h2><em>Ledger</em></h2></div><div class="meta">Leitner · 5 boxes</div>`;
+    wrap.append(chapter);
+
+    // Due banner
+    const dueBox = el('div', { class: 'srs-due' });
+    dueBox.innerHTML = `
       <div>
-        <div class="due">오늘 복습할 단어</div>
-        <div class="count">${due.length}개</div>
+        <div class="label">DUE TODAY</div>
+        <div><span class="num">${due.length}</span><span class="unit">${due.length === 1 ? 'word' : 'words'}</span></div>
       </div>
-      <button id="srs-start">시작 →</button>
+      <button id="srs-go">Begin →</button>
     `;
-    banner.querySelector('#srs-start').addEventListener('click', () => {
+    dueBox.querySelector('#srs-go').addEventListener('click', () => {
       FlashView.source = 'today'; FlashView.idx = 0; FlashView.flipped = false;
       App.switchTab('flash');
     });
-    main.append(banner);
+    wrap.append(dueBox);
 
-    // Box overview
-    const grid = el('div', { class: 'srs-overview' });
+    // Boxes
+    const boxes = el('div', { class: 'srs-boxes' });
     for (let i = 1; i <= 5; i++) {
-      const box = el('div', { class:'srs-box' });
-      box.innerHTML = `<div class="label">${SRS.labels[i-1]}</div><div class="count">${counts[i]}</div><div class="interval">${SRS.intervalLabels[i-1]}</div>`;
-      grid.append(box);
+      const b = el('div', { class: 'srs-box' });
+      b.innerHTML = `<div class="roman">Box ${SRS.romans[i - 1]}</div><div class="count">${counts[i]}</div><div class="interval">${SRS.labels[i - 1]}</div>`;
+      boxes.append(b);
     }
-    main.append(grid);
+    wrap.append(boxes);
 
-    // Stats
-    const total = allVocab.length;
-    const studied = total - counts[0];
-    const mastered = counts[5];
-    const stats = el('div', { class:'stat-grid' });
-    stats.append(
-      this._stat('학습 시작한 단어', `${studied}`, `전체 ${total}개 중 (${Math.round(studied/total*100)}%)`),
-      this._stat('마스터 단어 (Box 5)', `${mastered}`, '30일 후 복습 예정'),
-      this._stat('미학습 단어', `${counts[0]}`, '한 번도 본 적 없음'),
-      this._stat('오늘 복습 대상', `${due.length}`, '간격반복법 기준')
+    // Stat row
+    const total = all.length, studied = total - counts[0], mastered = counts[5];
+    const grid = el('div', { class: 'stat-grid' });
+    grid.append(
+      this._cell('STUDIED', `${studied}`, `<em>${Math.round(studied / total * 100)}%</em> of ${total}`),
+      this._cell('MASTERED', `${mastered}`, 'Box V · 1 month'),
+      this._cell('UNSEEN', `${counts[0]}`, 'never reviewed'),
+      this._cell('DUE', `${due.length}`, 'awaiting review')
     );
-    main.append(stats);
+    wrap.append(grid);
 
-    // How it works
-    const info = el('div', { class:'day-stats', style:'margin-top:14px;' });
-    info.innerHTML = `
-      <h3>🧠 Leitner 시스템이란?</h3>
-      <p style="font-size:13px; color:var(--muted); margin:0; line-height:1.7;">
-      단어를 5개 박스로 분류해서, 각 박스마다 다른 주기로 복습하는 방법이에요.<br/>
-      <b>맞히면</b> → 다음 박스로 (복습 주기 길어짐) · <b>틀리면</b> → Box 1으로 (다시 매일 복습)<br/>
-      퀴즈와 플래시카드 모두 SRS에 자동으로 반영됩니다.
-      </p>
+    const essay = el('div', { class: 'essay' });
+    essay.innerHTML = `
+      <h4>On the method</h4>
+      Sebastian Leitner's index-card system arranges words into five boxes, each reviewed at a longer interval. A correct recall promotes the card forward — toward eventual mastery in Box <em>Ⅴ</em>, reviewed monthly. An incorrect recall returns it to Box <em>Ⅰ</em>, to be seen again tomorrow. Both flashcards and the examination apply this rhythm automatically.
     `;
-    main.append(info);
+    wrap.append(essay);
+    main.append(wrap);
   },
-  _stat(label, val, sub) {
-    return el('div', { class:'stat-card' },
-      el('div', { class:'label' }, label),
-      el('div', { class:'val' }, val),
-      el('div', { class:'sub' }, sub)
+  _cell(label, val, sub) {
+    return el('div', { class: 'stat-cell' },
+      el('div', { class: 'label' }, label),
+      el('div', { class: 'val', html: val }),
+      el('div', { class: 'sub', html: sub })
     );
   }
 };
 
-/* ─── TAB: STATS ─────────────────────────────────────────── */
+/* ════════════════════════════════════════════════════════════════
+   VIEW: INDEX (stats)
+   ════════════════════════════════════════════════════════════════ */
 const StatsView = {
   render(main) {
     main.innerHTML = '';
+    const wrap = el('div', { class: 'tab-content' });
     const state = Store.load();
-    const allVocab = VocabRepo.allWords(w => w.category === 'vocab');
-    const totalProg = Object.values(state.progress);
-    const totalCorrect = totalProg.reduce((s,p) => s + (p.correct||0), 0);
-    const totalAnswered = totalProg.reduce((s,p) => s + (p.total||0), 0);
-    const acc = totalAnswered ? Math.round(totalCorrect/totalAnswered*100) : 0;
-    const studied = totalProg.length;
-    const mastered = totalProg.filter(p => p.box === 5).length;
-    const starredCount = Object.keys(state.starred).length;
+    const all = VocabRepo.allWords(w => w.category === 'vocab');
+    const prog = Object.values(state.progress);
+    const totalCorrect = prog.reduce((s, p) => s + (p.correct || 0), 0);
+    const totalAns = prog.reduce((s, p) => s + (p.total || 0), 0);
+    const acc = totalAns ? Math.round(totalCorrect / totalAns * 100) : 0;
+    const mastered = prog.filter(p => p.box === 5).length;
 
-    const grid = el('div', { class:'stat-grid' });
+    const chapter = el('div', { class: 'chapter' });
+    chapter.innerHTML = `<div><div class="label">Progress report</div><h2><em>Index</em></h2></div><div class="meta">${new Date().toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' })}</div>`;
+    wrap.append(chapter);
+
+    const grid = el('div', { class: 'stat-grid' });
     grid.append(
-      this._stat('🔥 학습 연속일', `${state.streak.days || 0}일`, state.streak.last ? '오늘도 도전!' : '시작해 보세요'),
-      this._stat('📚 학습한 단어', `${studied}`, `전체 ${allVocab.length}개 중`),
-      this._stat('🏆 마스터', `${mastered}`, 'Box 5 도달'),
-      this._stat('🎯 정답률', `${acc}%`, `${totalCorrect} / ${totalAnswered}`),
-      this._stat('⭐ 즐겨찾기', `${starredCount}`, '별표한 단어'),
-      this._stat('📝 퀴즈 풀이', `${state.quizHistory.length}회`, state.quizHistory.length ? `최근 ${state.quizHistory[state.quizHistory.length-1].score}/${state.quizHistory[state.quizHistory.length-1].total}` : '아직 없음')
+      this._cell('STREAK', `<em>${state.streak.days || 0}</em>`, state.streak.last ? 'days running' : 'begin today'),
+      this._cell('STUDIED', `${prog.length}`, `of ${all.length} entries`),
+      this._cell('MASTERED', `${mastered}`, 'Box Ⅴ achieved'),
+      this._cell('ACCURACY', `<em>${acc}%</em>`, `${totalCorrect} of ${totalAns}`),
+      this._cell('BOOKMARKS', `${Object.keys(state.starred).length}`, 'marked'),
+      this._cell('QUIZZES', `${state.quizHistory.length}`,
+        state.quizHistory.length ? `last · ${state.quizHistory[state.quizHistory.length - 1].score}/${state.quizHistory[state.quizHistory.length - 1].total}` : 'none yet')
     );
-    main.append(grid);
+    wrap.append(grid);
 
-    // Day-by-day accuracy
-    const dayStats = el('div', { class:'day-stats' });
-    dayStats.append(el('h3', {}, '📅 Day별 학습 진도'));
+    // Day ledger
+    const ledger = el('div', { class: 'day-ledger' });
+    ledger.append(el('div', { class: 'title' }, 'PROGRESS BY DAY'));
     VocabRepo.dayMeta().forEach(d => {
       const words = VocabRepo.byDay(d.key);
       const studied = words.filter(w => state.progress[w.id]).length;
-      const pct = words.length ? Math.round(studied/words.length*100) : 0;
-      const row = el('div', { class:'row' });
-      const bar = el('div', { class:'progress-bar bar' });
-      bar.innerHTML = `<div style="width:${pct}%"></div>`;
-      row.append(
-        el('span', { class:'name' }, d.category === 'listening' ? `🎧 ${d.label}` : `Day ${d.key}`),
-        bar,
-        el('span', { class:'pct' }, `${studied}/${words.length}`)
-      );
-      dayStats.append(row);
+      const pct = words.length ? Math.round(studied / words.length * 100) : 0;
+      const row = el('div', { class: 'row' });
+      const name = d.category === 'listening' ? `<em>${esc(d.label)}</em>` : `Day <em>${d.key}</em>`;
+      row.innerHTML = `<span class="name">${name}</span><div class="bar"><div style="width:${pct}%"></div></div><span class="frac">${studied}/${words.length}</span>`;
+      ledger.append(row);
     });
-    main.append(dayStats);
+    wrap.append(ledger);
 
-    // Recent quiz history
+    // Recent quizzes
     if (state.quizHistory.length) {
       const recent = state.quizHistory.slice(-5).reverse();
-      const hist = el('div', { class:'day-stats', style:'margin-top:14px;' });
-      hist.append(el('h3', {}, '🕘 최근 퀴즈'));
+      const hist = el('div', { class: 'day-ledger' });
+      hist.append(el('div', { class: 'title' }, 'RECENT EXAMINATIONS'));
       recent.forEach(q => {
         const dt = new Date(q.date);
-        const pct = Math.round(q.score/q.total*100);
-        const row = el('div', { class:'row' });
-        const bar = el('div', { class:'progress-bar bar' });
-        bar.innerHTML = `<div style="width:${pct}%"></div>`;
-        row.append(
-          el('span', { class:'name' }, `${dt.getMonth()+1}/${dt.getDate()} ${String(dt.getHours()).padStart(2,'0')}:${String(dt.getMinutes()).padStart(2,'0')}`),
-          bar,
-          el('span', { class:'pct' }, `${q.score}/${q.total}`)
-        );
+        const pct = Math.round(q.score / q.total * 100);
+        const row = el('div', { class: 'row' });
+        row.innerHTML = `<span class="name">${dt.getMonth() + 1}/${dt.getDate()} <em>${String(dt.getHours()).padStart(2,'0')}:${String(dt.getMinutes()).padStart(2,'0')}</em></span><div class="bar"><div style="width:${pct}%"></div></div><span class="frac">${q.score}/${q.total}</span>`;
         hist.append(row);
       });
-      main.append(hist);
+      wrap.append(hist);
     }
 
-    // Settings + Reset
-    const settings = el('div', { class:'day-stats', style:'margin-top:14px;' });
-    settings.append(el('h3', {}, '⚙️ 설정'));
-    const autoTTS = el('label', { style:'display:flex;align-items:center;gap:8px;padding:8px 0;cursor:pointer;font-size:14px;' },
-      el('input', {
-        type:'checkbox',
-        ...(state.settings.autoTTS ? { checked: 'checked' } : {}),
-        onchange: (e) => { const s = Store.load(); s.settings.autoTTS = e.target.checked; Store.save(s); Toast.show('설정 저장됨'); }
-      }),
-      '카드 넘길 때 자동 발음'
-    );
-    settings.append(autoTTS);
-    settings.append(el('button', {
-      class:'btn btn-ghost', style:'margin-top:10px; width:100%;',
+    // Settings
+    const set = el('div', { class: 'settings-block' });
+    set.append(el('div', { class: 'title' }, 'SETTINGS'));
+    const lab = el('label');
+    const cb = el('input', { type: 'checkbox' });
+    if (state.settings.autoTTS) cb.checked = true;
+    cb.addEventListener('change', (e) => {
+      const s = Store.load();
+      s.settings.autoTTS = e.target.checked;
+      Store.save(s);
+      Toast.show('Saved');
+    });
+    lab.append(cb, document.createTextNode('Auto-play pronunciation on card flip'));
+    set.append(lab);
+
+    // — Cloud sync section —
+    const cloud = el('div', { class: 'pat-setting' });
+    const hasPAT = !!Store.getPAT();
+    cloud.innerHTML = `
+      <div class="title">CLOUD SYNC <span class="sync-state ${hasPAT ? 'ok' : ''}"><span class="dot"></span><span>${hasPAT ? 'connected' : 'off'}</span></span></div>
+      <p class="desc">청해 중 추가한 표현이 GitHub에 자동 백업되어 다른 기기에서도 보입니다. 토큰 한 번만 입력하면 끝.</p>
+      <input id="patInput" type="password" autocomplete="off" placeholder="ghp_…  또는  github_pat_…" value="${hasPAT ? '••••••••••••••••' + (Store.getPAT()||'').slice(-4) : ''}" />
+      <div class="pat-buttons">
+        <button data-act="test">Test</button>
+        <button data-act="save">Save & sync</button>
+      </div>
+    `;
+    cloud.querySelector('[data-act="test"]').addEventListener('click', async () => {
+      const v = cloud.querySelector('#patInput').value;
+      if (v && !v.startsWith('••')) Store.setPAT(v.trim());
+      const r = await CloudSync.test();
+      Toast.show(r.ok ? `✓ ${r.msg}` : `✗ ${r.msg}`);
+    });
+    cloud.querySelector('[data-act="save"]').addEventListener('click', async () => {
+      const v = cloud.querySelector('#patInput').value;
+      if (v && !v.startsWith('••')) Store.setPAT(v.trim());
+      else if (!v) { Store.setPAT(null); Toast.show('토큰 제거됨'); App.route('stats'); return; }
+      Toast.show('동기화 중…');
+      const ok = await CloudSync.push();
+      Toast.show(ok ? '✓ 클라우드 저장 완료' : '✗ 동기화 실패 (콘솔 확인)');
+      App.route('stats');
+    });
+    set.append(cloud);
+
+    set.append(el('button', {
+      class: 'danger',
       onclick: () => {
-        if (!confirm('모든 학습 진도가 삭제됩니다. 정말 초기화할까요?')) return;
+        if (!confirm('All study progress will be erased. Continue?')) return;
         localStorage.removeItem(Store._k);
-        Toast.show('초기화 완료');
+        Toast.show('Reset');
         App.route('stats');
       }
-    }, '학습 진도 초기화'));
-    main.append(settings);
+    }, 'Reset all progress'));
+    wrap.append(set);
+
+    main.append(wrap);
   },
-  _stat(label, val, sub) {
-    return el('div', { class:'stat-card' },
-      el('div', { class:'label' }, label),
-      el('div', { class:'val' }, val),
-      el('div', { class:'sub' }, sub)
+  _cell(label, val, sub) {
+    return el('div', { class: 'stat-cell' },
+      el('div', { class: 'label' }, label),
+      el('div', { class: 'val', html: val }),
+      el('div', { class: 'sub', html: sub })
     );
   }
 };
 
-/* ─── APP SHELL ─────────────────────────────────────────── */
+/* ════════════════════════════════════════════════════════════════
+   ADD ENTRY (modal)
+   ════════════════════════════════════════════════════════════════ */
+const AddView = {
+  show() {
+    if ($('.modal-overlay')) return;
+    const overlay = el('div', { class: 'modal-overlay' });
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) this.close(); });
+
+    const modal = el('div', { class: 'modal' });
+    modal.innerHTML = `
+      <div class="modal-head">
+        <div>
+          <div class="label">청해 · 받아쓰기 · 메모</div>
+          <h3>New <em>Entry</em></h3>
+        </div>
+        <button class="modal-close" data-act="close" aria-label="close">×</button>
+      </div>
+      <form class="add-form" id="addForm">
+        <label>
+          <span>Word</span>
+          <input name="w" type="text" required autocomplete="off" autocapitalize="off" placeholder="e.g. courier" />
+        </label>
+        <div class="row-2">
+          <label>
+            <span>IPA <em>optional</em></span>
+            <input name="ipa" type="text" autocomplete="off" placeholder="/ˈkʊriər/" />
+          </label>
+          <label>
+            <span>Part of Speech</span>
+            <select name="pos" class="pos-select">
+              <option value="">—</option>
+              <option value="n">noun · 명사</option>
+              <option value="v">verb · 동사</option>
+              <option value="a">adj. · 형용사</option>
+              <option value="ad">adv. · 부사</option>
+              <option value="phrase">phrase · 표현</option>
+              <option value="phrasal">phrasal v. · 구동사</option>
+            </select>
+          </label>
+        </div>
+        <label>
+          <span>Korean meaning</span>
+          <input name="ko" type="text" required placeholder="택배원, 운반자" />
+        </label>
+        <label>
+          <span>Synonyms <em>comma · separated</em></span>
+          <input name="syn" type="text" autocomplete="off" placeholder="messenger, carrier" />
+        </label>
+        <label>
+          <span>Example sentence <em>optional</em></span>
+          <textarea name="ex" rows="2" placeholder="The package was delivered by a courier."></textarea>
+        </label>
+        <label>
+          <span>Example KR <em>optional</em></span>
+          <input name="exKo" type="text" placeholder="그 소포는 택배원이 배달했다." />
+        </label>
+        <label>
+          <span>Listening note <em>강세 · 연음 · 함정</em></span>
+          <textarea name="note" rows="2" placeholder="첫음절 강세 (COU-ri-er) — career와 강세 정반대"></textarea>
+        </label>
+        <div class="modal-actions">
+          <button type="button" data-act="cancel">Cancel</button>
+          <button type="submit">Save entry →</button>
+        </div>
+      </form>
+    `;
+    overlay.append(modal);
+    document.body.append(overlay);
+
+    const close = () => this.close();
+    modal.querySelector('[data-act="close"]').addEventListener('click', close);
+    modal.querySelector('[data-act="cancel"]').addEventListener('click', close);
+    const onEsc = (e) => { if (e.key === 'Escape') { close(); document.removeEventListener('keydown', onEsc); } };
+    document.addEventListener('keydown', onEsc);
+
+    const form = modal.querySelector('#addForm');
+    form.addEventListener('submit', (ev) => {
+      ev.preventDefault();
+      const fd = new FormData(form);
+      const w = String(fd.get('w') || '').trim();
+      const ko = String(fd.get('ko') || '').trim();
+      if (!w || !ko) return;
+      const word = {
+        id: `cu-${Date.now()}-${Math.floor(Math.random() * 9999)}`,
+        w,
+        ipa: String(fd.get('ipa') || '').trim() || undefined,
+        pos: String(fd.get('pos') || '').trim() || undefined,
+        ko,
+        syn: String(fd.get('syn') || '').split(',').map(s => s.trim()).filter(Boolean),
+        ex: String(fd.get('ex') || '').trim() || undefined,
+        exKo: String(fd.get('exKo') || '').trim() || undefined,
+        note: String(fd.get('note') || '').trim() || undefined,
+        addedAt: Date.now()
+      };
+      // Remove undefined to keep JSON clean
+      Object.keys(word).forEach(k => word[k] === undefined && delete word[k]);
+      VocabRepo.addCustom(word);
+      Toast.show(Store.getPAT() ? '저장 · 클라우드 동기화 중' : '저장 (로컬)');
+      this.close();
+      // Jump to custom day so user sees it
+      VocabView.currentDay = 999;
+      App.switchTab('vocab');
+    });
+
+    // Focus first field
+    setTimeout(() => form.querySelector('[name="w"]')?.focus(), 100);
+  },
+  close() {
+    const o = $('.modal-overlay');
+    if (o) { o.remove(); }
+  }
+};
+
+/* ════════════════════════════════════════════════════════════════
+   APP SHELL
+   ════════════════════════════════════════════════════════════════ */
 const App = {
   currentTab: 'vocab',
   tabs: { vocab: VocabView, flash: FlashView, quiz: QuizView, srs: SRSView, stats: StatsView },
-
   async init() {
     TTS.init();
-    try {
-      await VocabRepo.load();
-    } catch (e) {
-      $('#main').innerHTML = `<div class="empty"><div class="icon">⚠️</div>단어 데이터를 불러올 수 없습니다.<br/><small>${escapeHtml(e.message)}</small></div>`;
+    try { await VocabRepo.load(); }
+    catch (e) {
+      $('#main').innerHTML = `<div class="empty">Could not load entries.<small>${esc(e.message)}</small></div>`;
       return;
     }
-    // D-day badge
-    const exam = VocabRepo.data.meta.examDate;
-    const d = dday(exam);
-    $('#dday').textContent = d > 0 ? `D-${d}` : (d === 0 ? 'D-Day' : `D+${-d}`);
-    document.documentElement.classList.add('auto-dark');
+    const d = dday(VocabRepo.data.meta.examDate);
+    $('#dday').textContent = d > 0 ? d : (d === 0 ? '0' : `+${-d}`);
 
-    // Tab nav binding
-    $$('#nav button').forEach(b => {
-      b.addEventListener('click', () => this.switchTab(b.dataset.tab));
-    });
+    $$('#nav button').forEach(b => b.addEventListener('click', () => this.switchTab(b.dataset.tab)));
 
-    // Register service worker
+    // FAB → Add entry modal
+    $('#fab')?.addEventListener('click', () => AddView.show());
+
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js').catch(err => console.warn('SW register failed:', err));
+      navigator.serviceWorker.register('sw.js').catch(err => console.warn(err));
     }
+
+    // If a sync was queued (offline previously), try now
+    if (Store.isQueued()) CloudSync.push().catch(() => {});
 
     this.route(this.currentTab);
   },
-
   switchTab(tab) {
     this.currentTab = tab;
     $$('#nav button').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
-    // Reset transient state when entering
     if (tab === 'flash') { FlashView.idx = 0; FlashView.flipped = false; FlashView._buildPool(); }
-    if (tab === 'quiz') { QuizView.state = 'setup'; }
+    if (tab === 'quiz') QuizView.state = 'setup';
     this.route(tab);
+    window.scrollTo({ top: 0, behavior: 'instant' });
   },
-
-  route(tab) {
-    this.tabs[tab || this.currentTab].render($('#main'));
-    // Scroll to top of main content after switch
-    if (tab !== this.currentTab) window.scrollTo({ top: 0 });
-  }
+  route(tab) { this.tabs[tab || this.currentTab].render($('#main')); }
 };
 
 document.addEventListener('DOMContentLoaded', () => App.init());
