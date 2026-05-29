@@ -188,32 +188,31 @@ nav.bottom .nav-inner {
 @media (max-width: 480px) { nav.bottom .nav-inner { padding: 0 20px; } }
 
 nav.bottom button {
-  font-family: var(--display);
+  font-family: var(--body);
   font-size: 14px;
-  letter-spacing: 0.01em;
+  letter-spacing: -0.005em;
   color: var(--ink-faded);
   padding: 4px 0;
   position: relative;
-  font-weight: 400;
-  font-variation-settings: "opsz" 36;
+  font-weight: 500;
   transition: color .25s;
   text-align: center;
 }
-nav.bottom button .ko {
-  font-family: var(--body);
-  font-size: 11.5px;
-  letter-spacing: 0.04em;
+nav.bottom button .en {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 9.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
   display: block;
-  margin-top: 2px;
+  margin-top: 3px;
   color: var(--ink-whisper);
   transition: color .25s;
+  font-variation-settings: "opsz" 36, "WONK" 1;
+  font-weight: 400;
 }
-nav.bottom button.active {
-  color: var(--terra);
-  font-style: italic;
-  font-variation-settings: "opsz" 144, "WONK" 1;
-}
-nav.bottom button.active .ko { color: var(--terra); font-style: normal; }
+nav.bottom button.active { color: var(--terra); }
+nav.bottom button.active .en { color: var(--terra); opacity: 0.85; }
 nav.bottom button.active::after {
   content: "";
   position: absolute;
@@ -1441,8 +1440,8 @@ nav.bottom button.active::after {
       <span class="sub">A vocabulary almanac</span>
     </div>
     <div class="countdown">
-      <span class="num" id="dday">—</span>
-      <span class="label">DAYS REMAINING</span>
+      <span class="num" id="dday">D-—</span>
+      <span class="label">시험까지</span>
     </div>
   </header>
 
@@ -1454,11 +1453,11 @@ nav.bottom button.active::after {
   <!-- ═══ BOTTOM NAV ═══ -->
   <nav class="bottom" id="nav">
     <div class="nav-inner">
-      <button data-tab="vocab" class="active">Entries<span class="ko">단어</span></button>
-      <button data-tab="flash">Cards<span class="ko">카드</span></button>
-      <button data-tab="quiz">Examen<span class="ko">시험</span></button>
-      <button data-tab="srs">Ledger<span class="ko">장부</span></button>
-      <button data-tab="stats">Index<span class="ko">색인</span></button>
+      <button data-tab="vocab" class="active">단어<span class="en">Entries</span></button>
+      <button data-tab="flash">카드<span class="en">Cards</span></button>
+      <button data-tab="quiz">퀴즈<span class="en">Examen</span></button>
+      <button data-tab="srs">복습<span class="en">Ledger</span></button>
+      <button data-tab="stats">통계<span class="en">Index</span></button>
     </div>
   </nav>
 
@@ -1747,7 +1746,8 @@ const ICO = {
   turtle:  '<svg viewBox="0 0 24 24"><path d="M3 17h2l1.5-3M21 17h-2l-1.5-3M9 17h6M7 11a5 5 0 0 1 10 0v3H7z M5 14a2 2 0 0 1 0-4 M19 14a2 2 0 0 0 0-4 M19 7l2-2 M5 7l-2-2"/></svg>',
   search:  '<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg>',
   bookmark:'<svg viewBox="0 0 24 24"><path d="M6 4h12v17l-6-4-6 4z"/></svg>',
-  sound:   '<svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9zM16 8a5 5 0 0 1 0 8"/></svg>'
+  sound:   '<svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9zM16 8a5 5 0 0 1 0 8"/></svg>',
+  quote:   '<svg viewBox="0 0 24 24"><path d="M7 7h4v4H7zM7 11c0 3 2 5 4 6M13 7h4v4h-4zM13 11c0 3 2 5 4 6"/></svg>'
 };
 
 /* ════════════════════════════════════════════════════════════════
@@ -1776,16 +1776,18 @@ function renderEntry(w, idx) {
       ${exKoHtml}
       ${noteHtml}
       <div class="actions">
-        <button data-act="play">${ICO.sound}<span>Speak</span></button>
-        <button data-act="slow">${ICO.turtle}<span>Slow</span></button>
+        <button data-act="play">${ICO.sound}<span>단어</span></button>
+        <button data-act="slow">${ICO.turtle}<span>천천히</span></button>
+        ${w.ex ? `<button data-act="ex">${ICO.quote}<span>예문</span></button>` : ''}
         <button class="star ${starred ? 'starred' : ''}" data-act="star" aria-label="bookmark">${ICO.bookmark}</button>
       </div>
     </div>
   `;
   node.addEventListener('click', (ev) => {
     const act = ev.target.closest('[data-act]')?.dataset.act;
-    if (act === 'play') { TTS.speak(w.w); if (w.ex) setTimeout(() => TTS.speak(w.ex), 750); }
+    if (act === 'play') { TTS.speak(w.w); }
     else if (act === 'slow') { TTS.slow(w.w); }
+    else if (act === 'ex') { if (w.ex) TTS.speak(w.ex); }
     else if (act === 'star') {
       const ss = Store.load();
       if (ss.starred[w.id]) delete ss.starred[w.id]; else ss.starred[w.id] = true;
@@ -1924,8 +1926,9 @@ const FlashView = {
     const stage = el('div', { class: 'flash-stage' });
     stage.innerHTML = `
       <div class="tts">
-        <button data-act="play" aria-label="speak">${ICO.sound}</button>
-        <button data-act="slow" aria-label="slow speak">${ICO.turtle}</button>
+        <button data-act="play" aria-label="단어 발음">${ICO.sound}</button>
+        <button data-act="slow" aria-label="단어 천천히">${ICO.turtle}</button>
+        ${w.ex ? `<button data-act="ex" aria-label="예문 발음">${ICO.quote}</button>` : ''}
       </div>
       ${this.flipped ? `
         <div class="flash-back">
@@ -1945,8 +1948,9 @@ const FlashView = {
     `;
     stage.addEventListener('click', (ev) => {
       const act = ev.target.closest('[data-act]')?.dataset.act;
-      if (act === 'play') { ev.stopPropagation(); TTS.speak(w.w); if (w.ex) setTimeout(() => TTS.speak(w.ex), 750); return; }
+      if (act === 'play') { ev.stopPropagation(); TTS.speak(w.w); return; }
       if (act === 'slow') { ev.stopPropagation(); TTS.slow(w.w); return; }
+      if (act === 'ex') { ev.stopPropagation(); if (w.ex) TTS.speak(w.ex); return; }
       this.flipped = !this.flipped;
       App.route('flash');
     });
@@ -2496,7 +2500,7 @@ const App = {
       return;
     }
     const d = dday(VocabRepo.data.meta.examDate);
-    $('#dday').textContent = d > 0 ? d : (d === 0 ? '0' : `+${-d}`);
+    $('#dday').textContent = d > 0 ? `D-${d}` : (d === 0 ? 'D-Day' : `D+${-d}`);
 
     $$('#nav button').forEach(b => b.addEventListener('click', () => this.switchTab(b.dataset.tab)));
 
