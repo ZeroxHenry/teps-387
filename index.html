@@ -1821,12 +1821,17 @@ const VocabView = {
       : 'all entries';
     const chapter = el('div', { class: 'chapter' });
     if (this.currentDay === 'all') {
-      chapter.innerHTML = `<div><div class="label">Reading list</div><h2><em>All</em> Entries</h2></div><div class="meta">${VocabRepo.allWords().length} words</div>`;
+      chapter.innerHTML = `<div><div class="label">전체 색인</div><h2><em>All</em> Entries</h2></div><div class="meta">${VocabRepo.allWords().length} words</div>`;
     } else if (this.currentDay === 'starred') {
       const n = VocabRepo.allWords(w => Store.load().starred[w.id]).length;
-      chapter.innerHTML = `<div><div class="label">Marked</div><h2><em>Bookmarks</em></h2></div><div class="meta">${n} words</div>`;
+      chapter.innerHTML = `<div><div class="label">즐겨찾기</div><h2><em>Bookmarks</em></h2></div><div class="meta">${n} words</div>`;
     } else if (meta && meta.category === 'listening') {
-      chapter.innerHTML = `<div><div class="label">Listening</div><h2>${esc(meta.label)}</h2></div><div class="meta">${headRight}</div>`;
+      chapter.innerHTML = `<div><div class="label">청해 · Listening</div><h2>${esc(meta.label)}</h2></div><div class="meta">${headRight}</div>`;
+    } else if (meta && meta.category === 'pool') {
+      const sourceLink = meta.sourceUrl ? `<a href="${meta.sourceUrl}" target="_blank" style="color:var(--terra);text-decoration:none;">${esc(meta.sourceTitle || meta.label)}</a>` : esc(meta.label);
+      chapter.innerHTML = `<div><div class="label">공인 출처 · Reference</div><h2>${esc(meta.label)}</h2><div style="font-family:var(--display);font-style:italic;font-size:12px;color:var(--ink-faded);margin-top:4px;">${sourceLink}</div></div><div class="meta">${headRight}</div>`;
+    } else if (meta && meta.category === 'custom') {
+      chapter.innerHTML = `<div><div class="label">청해 · 내 단어</div><h2><em>${esc(meta.label || '내 단어')}</em></h2></div><div class="meta">${headRight}</div>`;
     } else {
       chapter.innerHTML = `<div><div class="label">Chapter ${roman(meta.key)}</div><h2>Day <em>${meta.key}</em></h2></div><div class="meta">${headRight}</div>`;
     }
@@ -1836,8 +1841,10 @@ const VocabView = {
     const strip = el('div', { class: 'filter-strip' });
     strip.append(this._chip('all', 'All', this.currentDay === 'all'));
     strip.append(this._chip('starred', 'Bookmarks', this.currentDay === 'starred'));
+    days.filter(d => d.category === 'pool').forEach(d => strip.append(this._chip(d.key, esc(d.label), this.currentDay == d.key)));
     days.filter(d => d.category === 'vocab').forEach(d => strip.append(this._chip(d.key, `Day ${d.key}`, this.currentDay == d.key)));
     days.filter(d => d.category === 'listening').forEach(d => strip.append(this._chip(d.key, d.label, this.currentDay == d.key)));
+    days.filter(d => d.category === 'custom').forEach(d => strip.append(this._chip(d.key, esc(d.label || '내 단어'), this.currentDay == d.key)));
     wrap.append(strip);
 
     // Search
@@ -1896,6 +1903,9 @@ const FlashView = {
     strip.append(this._chip('today', 'Due Today', this.source === 'today'));
     strip.append(this._chip('all', 'All', this.source === 'all'));
     strip.append(this._chip('starred', 'Bookmarks', this.source === 'starred'));
+    VocabRepo.dayMeta().filter(d => d.category === 'pool').forEach(d =>
+      strip.append(this._chip(`day-${d.key}`, d.label, this.source === `day-${d.key}`))
+    );
     VocabRepo.dayMeta().filter(d => d.category === 'vocab').forEach(d =>
       strip.append(this._chip(`day-${d.key}`, `Day ${d.key}`, this.source === `day-${d.key}`))
     );
@@ -2053,6 +2063,12 @@ const QuizView = {
     const pills = el('div', { class: 'range-pills' });
     pills.append(el('button', { class: this.dayKey === 'all' ? 'active' : '', onclick: () => { this.dayKey = 'all'; App.route('quiz'); } }, 'ALL'));
     pills.append(el('button', { class: this.dayKey === 'starred' ? 'active' : '', onclick: () => { this.dayKey = 'starred'; App.route('quiz'); } }, 'BOOKMARKS'));
+    VocabRepo.dayMeta().filter(d => d.category === 'pool').forEach(d => {
+      pills.append(el('button', {
+        class: this.dayKey == d.key ? 'active' : '',
+        onclick: () => { this.dayKey = d.key; App.route('quiz'); }
+      }, d.label));
+    });
     VocabRepo.dayMeta().filter(d => d.category === 'vocab').forEach(d => {
       pills.append(el('button', {
         class: this.dayKey == d.key ? 'active' : '',
